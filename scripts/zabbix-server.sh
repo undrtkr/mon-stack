@@ -28,7 +28,7 @@ case "$1" in
 
         # Install dependencies
         echo -e ""
-        echo -e '\E[96m'"\033\- Install epel repo and jq packages.\033[0m"
+        echo -e '\E[96m'"\033\- Install dependencies.\033[0m"
         sleep 1
         #check if epel repo installed
         EPEL=$(rpm -qa |egrep epel-release || echo "epel-release is not installed")
@@ -41,6 +41,7 @@ case "$1" in
         echo -ne "\t\t\t" && Skip
         fi
 
+        #check if jq installed
         JQ=$(rpm -qa |egrep "^jq" || echo "jq is not installed")
         if [[ $JQ == "jq is not installed" ]]; then
             yum install -y jq
@@ -50,6 +51,21 @@ case "$1" in
             EchoDash
         else
         echo -n "jq is already installed:" && \
+        echo -ne "\t\t\t" && Skip
+        sleep 1
+        EchoDash
+        fi
+
+        #check if openssl installed
+        OSSL=$(rpm -qa |egrep "^openssl" || echo "openssl is not installed")
+        if [[ $OSSL == "openssl is not installed" ]]; then
+            yum install -y openssl
+            echo -n "Install openssl:" && \
+            echo -ne "\t\t\t\t" && Done
+            sleep 1
+            EchoDash
+        else
+        echo -n "openssl is already installed:" && \
         echo -ne "\t\t\t" && Skip
         sleep 1
         EchoDash
