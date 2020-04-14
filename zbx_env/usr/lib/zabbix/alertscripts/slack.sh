@@ -29,6 +29,11 @@ fi
 #  followed by the message that Zabbix actually sent us ($3)
 message="${subject}: $3"
 
+# Install curl if it's not installed.
+if [[ ! -x /usr/bin/curl ]]; then
+   apk add --no-cache curl curl-dev
+fi
+
 # Build our JSON payload and send it as a POST request to the Slack incoming web-hook URL
 payload="payload={\"channel\": \"${to//\"/\\\"}\", \"username\": \"${username//\"/\\\"}\", \"text\": \"${message//\"/\\\"}\", \"icon_emoji\": \"${emoji}\"}"
 curl -m 5 --data-urlencode "${payload}" $url -A 'zabbix-slack-alertscript / https://github.com/ericoc/zabbix-slack-alertscript'
