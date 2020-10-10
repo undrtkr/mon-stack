@@ -1084,6 +1084,99 @@ case "$1" in
         sleep 1
     ;;
 
+    enable-slack)
+        ########## SLACK CONFIGURATION ##########
+        echo ""
+        GetSlackNotifAnswer
+
+        if [[ "$SlackEnable" =~ $yesPattern ]]; then
+            # Install curl and curl-dev on zabbix-server
+            CheckZabbix
+            if [[ "$status" == *" Up "* ]]; then
+                docker-compose exec zabbix-server apk --no-cache add curl curl-dev > /dev/null 2>&1
+                echo -n "Slack dependency installation:"
+                echo -ne "\t\t\t" && Done
+            else
+                echo -n "Zabbix is not running. Quit!"
+                EchoDash
+                exit 1
+            fi
+
+            # Set slack webhook URL
+            sed -i '/^url\=/d' $BASEDIR/../zbx_env/usr/lib/zabbix/alertscripts/slack.sh  &&
+            sed -i "/^# Slack incoming web-hook URL/a url='"$SlackWebHook"'" $BASEDIR/../zbx_env/usr/lib/zabbix/alertscripts/slack.sh
+
+            # Create media type for slack
+            GetZabbixAuthToken
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(CreateSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+            if [[ "$POST" == *"error"* ]]; then
+                if [[ "$POST" == *"already exists"* ]]; then
+                    echo -n "Slack mediatype is already exist."
+                    echo -ne "\t\t\t" && Skip
+                else
+                    echo -n "Create slack mediatype:"
+                    echo -ne "\t\t\t" && Failed
+                    echo -n "An error occured. Please check the error output"
+                    echo $POST |jq .
+                    sleep 1
+                fi
+            else
+                echo -n "Create slack mediatype :"
+                echo -ne "\t\t\t" && Done
+                sleep 1
+            fi
+
+            # Assign slack mediatype to admin user
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(AddSlackMediatoAdminPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+            if [[ "$POST" == *"error"* ]]; then
+                if [[ "$POST" == *"already exists"* ]]; then
+                    echo -n "Slack mediatype is already enabled for Admin."
+                    echo -ne "\t\t\t" && Skip
+                else
+                    echo -n "Assign slack mediatype to Admin user:"
+                    echo -ne "\t\t\t" && Failed
+                    echo -n "An error occured. Please check the error output"
+                    echo $POST |jq .
+                    sleep 1
+                fi
+            else
+                echo -n "Assign slack mediatype to Admin user:"
+                echo -ne "\t\t" && Done
+                sleep 1
+            fi
+
+        else
+                echo -n "Slack notification configuration:" && \
+                echo -ne "\t\t" && Skip
+        fi
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(NotifTriggerPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+            if [[ "$POST" == *"error"* ]]; then
+                echo -n "Enable notifications for admin group:"
+                echo -ne "\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo "$POST" |jq .
+                sleep 1
+                else
+                echo -n "Enable notifications for admin group:"
+                echo -ne "\t\t" && Done
+                sleep 1
+                EchoDash
+            fi
+
+    ;;
+
     *)
         echo $"Usage: $0 {init}"
         exit 1
