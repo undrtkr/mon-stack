@@ -355,27 +355,27 @@ services:
      - zabbix-database
      - mysql-database
 
-  grafana-server:
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./zbx_env/etc/ssl/grafana:/etc/ssl/grafana:ro
-      - grafana-data:/var/lib/grafana:rw
-    restart: always
-    env_file:
-      - ./configs/.env_grafana
-    ulimits:
-      nproc: 65535
-      nofile:
-        soft: 20000
-        hard: 40000
-    mem_limit: 512m
-    user: root
-    networks:
-      zbx_net:
-        aliases:
-          - grafana
+ grafana-server:
+   image: grafana/grafana:latest
+   ports:
+     - "3000:3000"
+   volumes:
+     - ./zbx_env/etc/ssl/grafana:/etc/ssl/grafana:ro
+     - grafana-data:/var/lib/grafana:rw
+   restart: always
+   env_file:
+     - ./configs/.env_grafana
+   ulimits:
+     nproc: 65535
+     nofile:
+       soft: 20000
+       hard: 40000
+   mem_limit: 512m
+   user: root
+   networks:
+     zbx_net:
+       aliases:
+         - grafana
 
 networks:
   zbx_net_frontend:
