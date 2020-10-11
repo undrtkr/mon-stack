@@ -211,7 +211,7 @@
               "filter": "$host"
             },
             "item": {
-              "filter": "Number of CPU"
+              "filter": "Number of CPUs"
             },
             "mode": 0,
             "options": {
@@ -231,7 +231,7 @@
           }
         ],
         "thresholds": "",
-        "title": "NUMBER OF CPU",
+        "title": "NUMBER OF CPUs",
         "type": "singlestat",
         "valueFontSize": "50%",
         "valueMaps": [

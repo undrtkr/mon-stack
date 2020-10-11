@@ -416,6 +416,30 @@ cat <<EOF
 EOF
 }
 
+# Add free memory usege as percent for Windows
+function FreeMemPercentWinPD {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "item.update",
+    "params": {
+   	"hostid": "10287",
+        "name": "Free memory in %",
+        "key_": "vm.memory.size[pavailable]",
+		"value_type": 0,
+		"type": 0,
+        "units": "%",
+        "delay": "1m",
+        "status": 0,
+        "applications": ["1203"]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Disable  annoying service discovery rules which creates too mant false positive alerts.
 function DisableAnnoyingWinServiceDiscovery {
 cat <<EOF
 {
@@ -1009,7 +1033,7 @@ cat <<EOF
         "type": "alexanderzobnin-zabbix-datasource",
         "typeLogoUrl": "public/plugins/alexanderzobnin-zabbix-datasource/img/zabbix_app_logo.svg",
         "access": "proxy",
-        "url": "https://zabbix-web-nginx-mysql:443/api_jsonrpc.php",
+        "url": "https://zabbix-web-nginx-mysql:8443/api_jsonrpc.php",
         "password": "zabbix",
         "user": "apiuser",
         "database": "",

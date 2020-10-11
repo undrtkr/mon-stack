@@ -269,7 +269,6 @@ case "$1" in
 
 
         ########## TEMPLATE CONFIGURATIONS ##########
-        # This will add new time
         echo -e ""
         echo -e '\E[96m'"\033\- Tune Linux OS Template.\033[0m"
         sleep 1
@@ -374,30 +373,6 @@ case "$1" in
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
         -H "Content-Type:application/json" \
-        -X POST --data "$(DisableAnnoyingWinServiceDiscovery)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Annoying Windows service discovery already disabled."
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Disable annoying Windows service LLD rule:"
-                echo -ne "\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Disable annoying Windows service items LLD rule:"
-            echo -ne "\t" && Done
-            sleep 1
-        fi
-
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
         -X POST --data "$(LLDFSRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
 
         if [[ "$POST" == *"error"* ]]; then
@@ -438,6 +413,51 @@ case "$1" in
         else
             echo -n "Set netif discovery LLD interval to 15m:"
             echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(FreeMemPercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Free mem in % item is already exist."
+                echo -ne "\t\t\t" && Skip
+            else
+                echo -n "Create fee mem item as percentage:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create fee mem item as percentage:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(DisableAnnoyingWinServiceDiscovery)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Annoying Windows service discovery already disabled."
+                echo -ne "\t" && Skip
+            else
+                echo ""
+                echo -n "Disable annoying Windows service LLD rule:"
+                echo -ne "\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Disable annoying Windows service items LLD rule:"
+            echo -ne "\t" && Done
             sleep 1
         fi
 
@@ -571,7 +591,10 @@ case "$1" in
         echo -e '\E[96m'"\033\- Grafana configurations.\033[0m"
         sleep 1
 
-        # Enable zabbix plugin
+        # Enable zabbix datasource plugin
+        docker exec -it \
+            $(docker ps |egrep grafana |awk '{print $1}') \
+            sed -i "s/;allow_loading_unsigned_plugins =/allow_loading_unsigned_plugins = alexanderzobnin-zabbix-datasource/g" /etc/grafana/grafana.ini
         POST=$(curl --insecure -s \
         -H "Content-Type:application/x-www-form-urlencoded" \
         -X POST $GRF_SERVER_URL/api/plugins/alexanderzobnin-zabbix-app/settings?enabled=true)
