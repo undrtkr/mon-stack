@@ -423,7 +423,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-   	"hostid": "10287",
+   	    "hostid": "10287",
         "name": "Free memory in %",
         "key_": "vm.memory.size[pavailable]",
 		"value_type": 0,
