@@ -277,77 +277,6 @@ case "$1" in
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
         -H "Content-Type:application/json" \
-        -X POST --data "$(DiskUsedPercentLinuxPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Disk usage in % item prototype is already exists"
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Create an item prototype for disk usage in %:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create itemprototype for disk usage in %:" && \
-            echo -ne "\t\t" && Done
-            sleep 1
-        fi
-
-        CreateLinuxCPULoadAllCoreItems
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(AvailMemoryPercentLinuxItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Available memory in % is already exists."
-                echo -ne "\t\t" && Skip
-            else
-                echo ""
-                echo -n "Create available memory in % item for Linux:"
-                echo -ne "\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create available memory in % item for Linux:"
-            echo -ne "\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(NumOfCPULinuxItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "CPU count item for Linux is already exists."
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Create CPU count item for Linux:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create CPU count item for Linux:" && \
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
         -X POST --data "$(LLDFSRuleLinuxPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
 
         if [[ "$POST" == *"error"* ]]; then
@@ -356,14 +285,14 @@ case "$1" in
                 echo -ne "\t\t" && Skip
             else
                 echo ""
-                echo -n "Set filesystem discovery LLD interval to 5m:"
+                echo -n "Set filesystem discovery LLD interval to 15m:"
                 echo -ne "\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set filesystem discovery LLD interval to 5m:" && \
+            echo -n "Set filesystem discovery LLD interval to 15m:" && \
             echo -ne "\t\t" && Done
             sleep 1
         fi
@@ -376,10 +305,10 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 5m."
+                echo -n "LLD rule is already set to 15m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set netif discovery LLD interval to 5m:"
+                echo -n "Set netif discovery LLD interval to 15m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
@@ -399,17 +328,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total memory check interval is already set to 10m."
+                echo -n "Total memory check interval is already set to 15m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total memory check interval to 10m:"
+                echo -n "Set total memory check interval to 15m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total memory check interval to 10m:"
+            echo -n "Set total memory check interval to 15m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -422,17 +351,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total swap check interval is already set to 10m."
+                echo -n "Total swap check interval is already set to 15m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total swap check interval to 10m:"
+                echo -n "Set total swap check interval to 15m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total swap check interval to 10m:"
+            echo -n "Set total swap check interval to 15m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -441,52 +370,6 @@ case "$1" in
         echo -e ""
         echo -e '\E[96m'"\033\- Tune Windows OS Template.\033[0m"
         sleep 1
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(CreateNumOfCPUWinItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "CPU count item for Windows is already exists."
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Create CPU count item for Windows:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create CPU count item for Windows:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(CPUUtilWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "CPU utilization item for Windows is already exists."
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Create CPU utilization item for Windows:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create CPU utilization item for Windows:"
-            echo -ne "\t\t" && Done
-            sleep 1
-        fi
 
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
@@ -519,18 +402,18 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 5m."
+                echo -n "LLD rule is already set to 15m."
                 echo -ne "\t\t" && Skip
             else
                 echo ""
-                echo -n "Set filesystem discovery LLD interval to 5m:"
+                echo -n "Set filesystem discovery LLD interval to 15m:"
                 echo -ne "\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set filesystem discovery LLD interval to 5m:" && \
+            echo -n "Set filesystem discovery LLD interval to 15m:" && \
             echo -ne "\t\t" && Done
             sleep 1
         fi
@@ -543,86 +426,19 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 5m."
+                echo -n "LLD rule is already set to 15m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set netif discovery LLD interval to 5m:"
+                echo -n "Set netif discovery LLD interval to 15m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set netif discovery LLD interval to 5m:"
+            echo -n "Set netif discovery LLD interval to 15m:"
             echo -ne "\t\t\t" && Done
             sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(FreeMemPercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Free mem in % item is already exist."
-                echo -ne "\t\t\t" && Skip
-            else
-                echo -n "Update fee mem item as percentage:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Update fee mem item as percentage:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(ExistingFreeMemTriggerWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Free mem trigger is already deleted"
-                echo -ne "\t\t\t" && Skip
-            else
-                echo -n "Delete existing trigger for free mem:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Delete existing trigger for free mem:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(NewFreeMemTriggerWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Free mem trigger is already exist"
-                echo -ne "\t\t\t" && Skip
-            else
-                echo -n "Create trigger for free mem in %:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create trigger for free mem in %:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-            EchoDash
         fi
 
         ########## ZABBIX API USER CONFIGURATIONS ##########

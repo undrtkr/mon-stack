@@ -8,11 +8,11 @@ function Done () {
 }
 
 function Skip () {
-    echo -e '... \E[32m'"\033\skipped\033[0m"
+    echo -e '==> \E[32m'"\033\skipped\033[0m"
 }
 
 function Failed () {
-    echo -e '... \E[91m'"\033\ failed\033[0m"
+    echo -e '==> \E[91m'"\033\ failed\033[0m"
 }
 
 function GetConfirmation() {
@@ -316,137 +316,6 @@ EOF
 }
 
 ########## ITEM AND TRIGGER CONFIGURATIONS ##########
-function DiskUsedPercentLinuxPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "itemprototype.create",
-    "params": {
-        "name": "Used disk space on \$1 (percentage)",
-        "key_": "vfs.fs.size[{#FSNAME},pused]",
-		"value_type": "0",
-        "units": "%",
-        "hostid": "10001",
-        "ruleid": "22450",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [5]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-function CreateLinuxCPULoadAllCoreItems {
-GetZabbixAuthToken
-INTERVAL="1 5 15"
-for i in $INTERVAL
-do
-LinuxCPULoadAllCorePD=$(cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Processor load ($i min average all core)",
-        "key_": "system.cpu.load[all,avg$i]",
-        "hostid": "10001",
-        "type": 0,
-        "value_type": 0,
-        "interfaceid": "0",
-        "applications": ["13"],
-        "delay": "1m",
-		"history": "1w",
-        "trends": "365d",
-		"description": "The processor load is cumulative system CPU load.",
-        "status": "0"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-)
-
-POST=$(curl -s --insecure \
--H "Accept: application/json" \
--H "Content-Type:application/json" \
--X POST --data "$LinuxCPULoadAllCorePD" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-if [[ "$POST" == *"error"* ]]; then
-    if [[ "$POST" == *"already exists"* ]]; then
-        echo -n "Item $i min CPU load is already exists"
-        echo -ne "\t\t" && Skip
-    else
-        echo ""
-        echo -n "Create item for $i min CPU load on all cores:"
-        echo -ne "\t" && Failed
-        echo -n "An error occured. Please check the error output"
-        echo $POST |jq .
-        sleep 1
-    fi
-else
-    echo -n "Create item for $i min CPU load on all cores:"
-    echo -ne "\t\t" && Done
-    sleep 1
-fi
-done
-}
-
-# Create total cpu count item for Linux
-function AvailMemoryPercentLinuxItemPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Available memory in %",
-        "key_": "vm.memory.size[pavailable]",
-		"value_type": "0",
-        "units": "%",
-        "hostid": "10001",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [15]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Total cpu count item for Linux
-function NumOfCPULinuxItemPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Number of CPU",
-        "key_": "system.cpu.num[online]",
-		"value_type": "0",
-        "units": "",
-        "hostid": "10001",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [13]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
 
 # Set interval to 5m for FS discovery in linux template
 function LLDFSRuleLinuxPD {
@@ -455,8 +324,7 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-    	"hostid": "10001",
-        "itemid": "22450",
+        "itemid": "29201",
         "delay": "5m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
@@ -472,9 +340,8 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-    	"hostid": "10001",
-        "itemid": "22444",
-        "delay": "5m"
+        "itemid": "29203",
+        "delay": "15m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -489,9 +356,9 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-    	"hostid": "10001",
-        "itemid": "10026",
-        "delay": "10m"
+    	"hostid": "10274",
+        "itemid": "29104",
+        "delay": "15m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -506,9 +373,9 @@ cat <<EOF
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-    	"hostid": "10001",
-        "itemid": "10030",
-        "delay": "10m"
+    	"hostid": "10274",
+        "itemid": "29106",
+        "delay": "15m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -516,43 +383,15 @@ cat <<EOF
 EOF
 }
 
-# Create total cpu count item for Windows
-function CreateNumOfCPUWinItemPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Number of CPU",
-        "key_": "system.cpu.num[online]",
-		"value_type": "0",
-        "units": "",
-        "hostid": "10081",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [325]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-
-# Set interval to 5m for FS discovery for Windows template
+# Set interval to 15m for FS discovery for Windows template
 function LLDFSRuleWinPD {
 cat <<EOF
 {
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
-    	"hostid": "10081",
-        "itemid": "23162",
-        "delay": "5m"
+        "itemid": "29509",
+        "delay": "15m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -565,94 +404,12 @@ function LLDNetIfRuleWinPD {
 cat <<EOF
 {
     "jsonrpc": "2.0",
-    "method": "discoveryrule.update",
-    "params": {
-    	"hostid": "10081",
-        "itemid": "23163",
-        "delay": "5m"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Create total cpu count item for Windows
-function CPUUtilWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "CPU Utilization",
-        "key_": "system.cpu.util",
-		"value_type": "0",
-        "units": "%",
-        "hostid": "10081",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [325]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Update free memory user as percent for Windows
-function FreeMemPercentWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
     	"hostid": "10081",
-        "itemid": "23158",
-        "name": "Free memory in %",
-        "key_": "vm.memory.size[pavailable]",
-		"value_type": 0,
-        "units": "%"
+        "itemid": "31456",
+        "delay": "15m"
     },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Delete free memory trigger for Windows
-function ExistingFreeMemTriggerWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "trigger.delete",
-    "params": [
-        "13433"
-    ],
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Delete free memory trigger for Windows
-function NewFreeMemTriggerWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "trigger.create",
-    "params": {
-		"description": "Lack of free memory on server {HOST.NAME}",
-        "expression": "{Template OS Windows:vm.memory.size[pavailable].last(0)}<10",
-        "expression_constructor": "0",
-        "recovery_expression_constructor": "0",
-        "status": "0",
-        "priority": "3",
-        "type": "0"
-        },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
 }
@@ -666,7 +423,7 @@ cat <<EOF
     "method": "discoveryrule.update",
     "params": {
 		"hostid": "10081",
-        "itemid": "23665",
+        "itemid": "30424",
         "status": "1"
     },
     "auth": "$ZBX_AUTH_TOKEN",
