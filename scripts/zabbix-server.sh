@@ -595,6 +595,7 @@ case "$1" in
         docker exec -it \
             $(docker ps |egrep grafana |awk '{print $1}') \
             sed -i "s/;allow_loading_unsigned_plugins =/allow_loading_unsigned_plugins = alexanderzobnin-zabbix-datasource/g" /etc/grafana/grafana.ini
+        docker restart $(docker ps |egrep grafana |awk '{print $1}')
         POST=$(curl --insecure -s \
         -H "Content-Type:application/x-www-form-urlencoded" \
         -X POST $GRF_SERVER_URL/api/plugins/alexanderzobnin-zabbix-app/settings?enabled=true)

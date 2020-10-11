@@ -421,7 +421,7 @@ function FreeMemPercentWinPD {
 cat <<EOF
 {
     "jsonrpc": "2.0",
-    "method": "item.update",
+    "method": "item.create",
     "params": {
    	    "hostid": "10287",
         "name": "Free memory in %",
