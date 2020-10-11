@@ -89,3 +89,5 @@ zbx_env/etc/ssl/grafana/ssl.crt
 zbx_env/etc/ssl/grafana/ssl.key
 zbx_env/etc/ssl/grafana/dhparam.pem
 
+# Zabbix mysql files
+zbx_env/var/lib/mysql/*

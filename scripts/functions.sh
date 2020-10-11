@@ -4,7 +4,7 @@ source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev
 
 # Global functions
 function Done () {
-    echo -e '... \E[32m'"\033\done\033[0m"
+    echo -e '==> \E[32m'"\033\done\033[0m"
 }
 
 function Skip () {
