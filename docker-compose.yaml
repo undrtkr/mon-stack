@@ -199,8 +199,8 @@ services:
       cpus: '0.5'
       memory: 256M
   env_file:
-   - .env_db_mysql
-   - .env_web
+   - ./configs/.env_db_mysql
+   - ./configs/.env_web
   secrets:
    - MYSQL_USER
    - MYSQL_PASSWORD
