@@ -253,7 +253,7 @@ services:
      - mysql-database
 
  grafana-server:
-   image: grafana/grafana:latest
+   image: grafana/grafana:7.2.1
    ports:
      - "3000:3000"
    volumes:
