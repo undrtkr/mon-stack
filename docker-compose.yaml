@@ -15,6 +15,7 @@ services:
    - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
    - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
    - snmptraps:/var/lib/zabbix/snmptraps:rw
+  restart: always
   links:
    - mysql-server:mysql-server
    - zabbix-java-gateway:zabbix-java-gateway
@@ -81,6 +82,7 @@ services:
    - /etc/timezone:/etc/timezone:ro
    - ./zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
    - ./zbx_env/usr/share/zabbix/modules/:/usr/share/zabbix/modules/:ro
+  restart: always
   deploy:
    resources:
     limits:
@@ -136,6 +138,7 @@ services:
    - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
    - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
    - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+  restart: always
   links:
    - zabbix-server:zabbix-server
   deploy:
@@ -168,6 +171,7 @@ services:
   image: zabbix/zabbix-java-gateway:alpine-5.0-latest
   ports:
    - "10052:10052"
+  restart: always
   deploy:
    resources:
     limits:
@@ -196,6 +200,7 @@ services:
    - "162:1162/udp"
   volumes:
    - snmptraps:/var/lib/zabbix/snmptraps
+  restart: always
   deploy:
    resources:
     limits:
@@ -229,6 +234,7 @@ services:
 #   - --ssl-key=/run/secrets/server-key.pem
   volumes:
    - mysql-data:/var/lib/mysql:rw
+  restart: always
   env_file:
    - ./configs/.env_db_mysql
   secrets:
@@ -252,6 +258,7 @@ services:
      - "3000:3000"
    volumes:
      - ./zbx_env/etc/ssl/grafana:/etc/ssl/grafana:ro
+     - ./configs/.grafana.ini:/etc/grafana/grafana.ini
      - grafana-data:/var/lib/grafana:rw
    restart: always
    env_file:

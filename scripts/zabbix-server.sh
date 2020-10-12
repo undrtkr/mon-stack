@@ -155,25 +155,29 @@ case "$1" in
         # Check if zabbix-server is already up
         CheckZabbix
         if [[ "$status" == "Not deployed" ]]; then
-           echo -e ""
-           echo -e '\E[96m'"\033\- Dockerized zabbix server deployment. \033[0m"
-           sleep 1
-           EchoDash
-           docker-compose up -d
-           # Wait until zabbix getting up
-           GetZabbixAuthToken
-           echo -e '\E[1m'"\033\- Waiting for Zabbix server getting ready... \033[0m"
-           while [ "$ZBX_AUTH_TOKEN" == "null" ] || [ -z "$ZBX_AUTH_TOKEN" ]
-           do
-            sleep 2
-            GetZabbixAuthToken
-            echo -e '\E[1m'"\033\- Waiting for Zabbix server getting ready... \033[0m"
-           done
-           echo ""
-           echo -n "Zabbix deployment:" && \
-           echo -ne "\t\t\t\t" && Done
-           sleep 1
-           EchoDash
+            echo -e ""
+            echo -e '\E[96m'"\033\- Dockerized zabbix server deployment. \033[0m"
+            sleep 1
+            EchoDash
+            docker-compose up -d
+
+            # Wait until zabbix getting up
+            for (( i=0; i<23; ++i)); do
+                GetZabbixAuthToken
+                [[ "$ZBX_AUTH_TOKEN" != "null" ]] && [[ -n "$ZBX_AUTH_TOKEN" ]] && break
+                echo -e '\E[1m'"\033\- Waiting for 5 seconds to zabbix server getting be ready... ( $(expr $(echo 23) - $i) retries left ) \033[0m"
+                sleep 5
+            done
+            if [[ "$ZBX_AUTH_TOKEN" == "null" ]] || [[ -z "$ZBX_AUTH_TOKEN" ]]; then
+                echo -e "\e[91m- [ERROR]: Zabbix server still not ready after 2 minutes. Please check zabbix server container.\e[0m"
+                exit 1
+            fi
+
+            echo ""
+            echo -n "Zabbix deployment:" && \
+            echo -ne "\t\t\t\t" && Done
+            sleep 1
+            EchoDash
         else
             echo -e ""
             echo -e '\E[91m'"\033\WARNING:\033[0m"
@@ -590,12 +594,19 @@ case "$1" in
         echo -e ""
         echo -e '\E[96m'"\033\- Grafana configurations.\033[0m"
         sleep 1
+        # Wait for grafana server to be ready
+        for (( i=0; i<23; ++i)); do
+            GRAFANA_HEALTH=$(curl -s --insecure https://localhost:3000/healthz)
+            [ "$GRAFANA_HEALTH" == "Ok" ] && break
+            echo -e '\E[1m'"\033\- Waiting for 5 seconds to grafana server getting be ready... ( $(expr $(echo 23) - $i) retries left ) \033[0m"
+            sleep 5
+        done
 
+        if [[ "$GRAFANA_HEALTH" != "Ok" ]]; then
+                echo -e "\e[91m- [ERROR]: Grafana server still not ready after 2 minutes. Please check grafana container.\e[0m"
+                exit 1
+        fi
         # Enable zabbix datasource plugin
-        docker exec -it \
-            $(docker ps |egrep grafana |awk '{print $1}') \
-            sed -i "s/;allow_loading_unsigned_plugins =/allow_loading_unsigned_plugins = alexanderzobnin-zabbix-datasource/g" /etc/grafana/grafana.ini
-        docker restart $(docker ps |egrep grafana |awk '{print $1}')
         POST=$(curl --insecure -s \
         -H "Content-Type:application/x-www-form-urlencoded" \
         -X POST $GRF_SERVER_URL/api/plugins/alexanderzobnin-zabbix-app/settings?enabled=true)
