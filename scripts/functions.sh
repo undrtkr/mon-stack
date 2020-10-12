@@ -690,7 +690,7 @@ cat <<EOF
         "parameters": [
                 {
                     "name": "zabbix_url",
-                    "value": "{$ZABBIX.URL}"
+                    "value": "https://ZBX_PUBLIC_IP:8443"
                 },
                 {
                     "name": "bot_token",
