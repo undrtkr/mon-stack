@@ -29,9 +29,6 @@ services:
     limits:
       cpus: '0.70'
       memory: 1G
-    reservations:
-      cpus: '0.5'
-      memory: 512M
   env_file:
    - ./configs/.env_db_mysql
    - ./configs/.env_srv
@@ -88,9 +85,6 @@ services:
     limits:
       cpus: '0.70'
       memory: 512M
-    reservations:
-      cpus: '0.5'
-      memory: 256M
   env_file:
    - ./configs/.env_db_mysql
    - ./configs/.env_web
@@ -146,9 +140,6 @@ services:
     limits:
       cpus: '0.2'
       memory: 128M
-    reservations:
-      cpus: '0.1'
-      memory: 64M
    mode: global
   env_file:
    - ./configs/.env_agent
@@ -177,9 +168,6 @@ services:
     limits:
       cpus: '0.5'
       memory: 512M
-    reservations:
-      cpus: '0.25'
-      memory: 256M
   env_file:
    - ./configs/.env_java
   networks:
@@ -206,9 +194,6 @@ services:
     limits:
       cpus: '0.5'
       memory: 256M
-    reservations:
-      cpus: '0.25'
-      memory: 128M
   networks:
    zbx_net_frontend:
     aliases:

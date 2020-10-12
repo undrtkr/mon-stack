@@ -333,7 +333,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 5m for network interface discovery in linux template
+# Set interval to 15m for network interface discovery in linux template
 function LLDNetIfRuleLinuxPD {
 cat <<EOF
 {
@@ -349,7 +349,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 10m for total memory check in linux template
+# Set interval to 15m for total memory check in linux template
 function TotalMemoryCheckIntervalPD {
 cat <<EOF
 {
@@ -366,7 +366,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 10m for total swap check in linux template
+# Set interval to 15m for total swap check in linux template
 function TotalSwapCheckIntervalPD {
 cat <<EOF
 {
@@ -399,7 +399,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 5m for network interface discovery for Windows template
+# Set interval to 15 for network interface discovery for Windows template
 function LLDNetIfRuleWinPD {
 cat <<EOF
 {
@@ -672,23 +672,21 @@ function GetSlackNotifAnswer(){
     if [[ "$SlackEnable" =~ $yesPattern ]]; then
         echo -e ""
         echo -e '\E[96m'"\033\- Slack settings. \033[0m"
-        echo -e '\E[1m'"\033\This section, deploys slack notification script that placed at \033[0m"
-        echo -e '\E[1m'"\033\https://github.com/ericoc/zabbix-slack-alertscript \033[0m"
-        echo -e '\E[1m'"\033\Also curl and curl-dev pkgs will be installed on the zabbix server container. \033[0m"
+        echo -e '\E[1m'"\033\This section, enables slack notification. \033[0m"
 
-        echo -e '\E[1m'"\033\An incoming web-hook integration must be created within your Slack.com account \033[0m"
-        echo -e '\E[1m'"\033\which can be done at https://my.slack.com/services/new/incoming-webhook \033[0m"
-        echo -e '\E[1m'"\033\Please create the webhook now and provide it.\033[0m"
+        echo -e '\E[1m'"\033\An slack app must be created within your Slack.com workspace \033[0m"
+        echo -e '\E[1m'"\033\as explained at https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/media/slack \033[0m"
+        echo -e '\E[1m'"\033\Please create the slack app now and provide its Bot User OAuth Access Token, and slack channel name.\033[0m"
         echo ""
         sleep 1
 
-        # Get slack webhook URL
-        echo -e '\E[96m'"\033\ Enter your slack webhook uri: \033[0m \c"
-        read SlackWebHook
-        while [[ -z $SlackWebHook ]]
+        # Get Bot Token
+        echo -e '\E[96m'"\033\ Enter your Bot User OAuth Access Token: \033[0m \c"
+        read SlackBotToken
+        while [[ -z $SlackBotToken ]]
         do
-          echo -e '\E[91m'"\033\ Please enter your webhook uri:\033[0m \c"
-          read SlackWebHook
+          echo -e '\E[91m'"\033\ Please enter your Bot User OAuth Access Token:\033[0m \c"
+          read SlackBotToken
         done
 
         # Get slack channel name to send notifications
@@ -707,25 +705,183 @@ function GetSlackNotifAnswer(){
     fi
 }
 
-function CreateSlackMediaTypePD () {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "mediatype.create",
-    "params": {
-        "description": "Slack",
-        "type": 1,
-        "exec_path": "slack.sh",
-        "exec_params": "{ALERT.SENDTO}\n{ALERT.SUBJECT}\n{ALERT.MESSAGE}\n"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
+function EnableSlack(){
 
-function AddSlackMediatoAdminPD() {
-if [[ "$SMTPEnable" =~ $yesPattern ]]; then
+# Create global macro for ZABBIX.URL
+ZabbixUrlGlobalMacroPD=$(
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "usermacro.createglobal",
+    "params":  {
+        "macro": "{$ZABBIX.URL}",
+        "value": "https://$ZBX_PUBLIC_IP:8443/"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 1
+}
+EOF
+)
+    POST=$(curl -s --insecure \
+    -H "Accept: application/json" \
+    -H "Content-Type:application/json" \
+    -X POST --data "$(ZabbixUrlGlobalMacroPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+    if [[ "$POST" == *"error"* ]]; then
+        echo -n "Creating a global macro for Zabbix URL:"
+        echo -ne "\t\t" && Failed
+        echo "An error occured. Please check the error output"
+        echo "$POST" |jq .
+        sleep 1
+        else
+        echo -n "Creating a global macro for Zabbix URL:"
+        echo -ne "\t\t" && Done
+        sleep 1
+    fi
+
+SetSlackBotTokenPD=$(
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "mediatype.update",
+    "params": {
+        "mediatypeid": "9",
+        "status": 0,
+        "parameters": [
+                {
+                    "name": "zabbix_url",
+                    "value": "{$ZABBIX.URL}"
+                },
+                {
+                    "name": "bot_token",
+                    "value": "$SlackBotToken"
+                },
+                {
+                    "name": "channel",
+                    "value": "{ALERT.SENDTO}"
+                },
+                {
+                    "name": "slack_mode",
+                    "value": "alarm"
+                },
+                {
+                    "name": "slack_as_user",
+                    "value": "true"
+                },
+                {
+                    "name": "event_tags",
+                    "value": "{EVENT.TAGS}"
+                },
+                {
+                    "name": "event_nseverity",
+                    "value": "{EVENT.NSEVERITY}"
+                },
+                {
+                    "name": "event_value",
+                    "value": "{EVENT.VALUE}"
+                },
+                {
+                    "name": "event_update_status",
+                    "value": "{EVENT.UPDATE.STATUS}"
+                },
+                {
+                    "name": "event_date",
+                    "value": "{EVENT.DATE}"
+                },
+                {
+                    "name": "event_time",
+                    "value": "{EVENT.TIME}"
+                },
+                {
+                    "name": "event_severity",
+                    "value": "{EVENT.SEVERITY}"
+                },
+                {
+                    "name": "event_opdata",
+                    "value": "{EVENT.OPDATA}"
+                },
+                {
+                    "name": "event_id",
+                    "value": "{EVENT.ID}"
+                },
+                {
+                    "name": "trigger_id",
+                    "value": "{TRIGGER.ID}"
+                },
+                {
+                    "name": "trigger_description",
+                    "value": "{TRIGGER.DESCRIPTION}"
+                },
+                {
+                    "name": "host_name",
+                    "value": "{HOST.HOST}"
+                },
+                {
+                    "name": "event_update_date",
+                    "value": "{EVENT.UPDATE.DATE}"
+                },
+                {
+                    "name": "event_update_time",
+                    "value": "{EVENT.UPDATE.TIME}"
+                },
+                {
+                    "name": "event_recovery_date",
+                    "value": "{EVENT.RECOVERY.DATE}"
+                },
+                {
+                    "name": "event_recovery_time",
+                    "value": "{EVENT.RECOVERY.TIME}"
+                },
+                {
+                    "name": "alert_message",
+                    "value": "{ALERT.MESSAGE}"
+                },
+                {
+                    "name": "alert_subject",
+                    "value": "{ALERT.SUBJECT}"
+                },
+                {
+                    "name": "discovery_host_dns",
+                    "value": "{DISCOVERY.DEVICE.DNS}"
+                },
+                {
+                    "name": "discovery_host_ip",
+                    "value": "{DISCOVERY.DEVICE.IPADDRESS}"
+                },
+                {
+                    "name": "event_source",
+                    "value": "{EVENT.SOURCE}"
+                },
+                {
+                    "name": "host_conn",
+                    "value": "{HOST.CONN}"
+                }
+            ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 1
+}
+EOF
+)
+
+    POST=$(curl -s --insecure \
+    -H "Accept: application/json" \
+    -H "Content-Type:application/json" \
+    -X POST --data "$(SetSlackBotTokenPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+    if [[ "$POST" == *"error"* ]]; then
+        echo -n "Adding bot token to slack medita type:"
+        echo -ne "\t\t" && Failed
+        echo "An error occured. Please check the error output"
+        echo "$POST" |jq .
+        sleep 1
+        else
+        echo -n "Adding bot token to slack medita type:"
+        echo -ne "\t\t" && Done
+        sleep 1
+    fi
+
+AddSlackMeditaTypetoAdminPD=$(
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -734,14 +890,7 @@ cat <<EOF
         "userid": "1",
         "user_medias": [
             {
-                "mediatypeid": "1",
-                "sendto": "$SentTo",
-                "active": 0,
-                "severity": 63,
-                "period": "1-7,00:00-24:00"
-            },
-            {
-                "mediatypeid": "4",
+                "mediatypeid": "9",
                 "sendto": "$SlackChannel",
                 "active": 0,
                 "severity": 63,
@@ -753,28 +902,23 @@ cat <<EOF
     "id": 0
 }
 EOF
-else
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "user.update",
-    "params": {
-        "userid": "1",
-        "user_medias": [
-            {
-                "mediatypeid": "4",
-                "sendto": "$SlackChannel",
-                "active": 0,
-                "severity": 63,
-                "period": "1-7,00:00-24:00"
-            }
-        ]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-fi
+)
+    POST=$(curl -s --insecure \
+    -H "Accept: application/json" \
+    -H "Content-Type:application/json" \
+    -X POST --data "$(AddSlackMeditaTypetoAdminPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+    if [[ "$POST" == *"error"* ]]; then
+        echo -n "Adding slack media type to admin user:"
+        echo -ne "\t\t" && Failed
+        echo "An error occured. Please check the error output"
+        echo "$POST" |jq .
+        sleep 1
+        else
+        echo -n "Adding slack media type to admin user:"
+        echo -ne "\t\t" && Done
+        sleep 1
+    fi
 }
 
 # API related
@@ -974,7 +1118,6 @@ cat <<EOF
 }
 EOF
 }
-
 
 function UpdateHostInterfacePD () {
 cat <<EOF

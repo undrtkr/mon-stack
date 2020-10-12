@@ -1,7 +1,7 @@
-# Dockerized Zabbix Server 4.0 Installation Script
+# Dockerized Zabbix Server 5.0 Installation Script
 
 
-This script, installs and configures a dockerized zabbix 4.0 server in a fully automated way on CentOS 7 platforms.
+This script, installs and configures a dockerized zabbix 5.0 server in a fully automated way on CentOS 7 platforms.
 
 Here's the summary:
 
@@ -12,14 +12,15 @@ Here's the summary:
 - Invokes the zabbix API to do following configurations.
     - Creates a bunch of hosts group.
     - Creates auto registration actions for Linux and Windows hosts.
-    - Adds some new items to Linux / Windows Templates: 
-        - Disk usage in percentage for Linux hosts.
-        - Creates additional CPU load checks to get cumulative CPU load as 1, 5 and 15 minutes avg. (The default template checks calculate the load as per core) for Linux hosts.
-        - Available memory in percentage for Linux and Windows hosts.
-        - Adds CPU count item for Linux and Windows hosts.
-        - CPU utilization check for Windows
-    - Changes filesystem and netif LLD rules intervals to 10 minutes for Linux and Windows hosts.
-    - Disables annoying Windows service items LLD rule:
+    - Tune Linux / Windows Templates items: 
+        - Set interval to 5m for FS discovery in linux template
+        - Set interval to 15m for network interface discovery in linux template
+        - Set interval to 15m for total memory check in linux template
+        - Set interval to 15m for total swap check in linux template
+        - Set interval to 15m for FS discovery for Windows template
+        - Set interval to 15 for network interface discovery for Windows template
+        - Add free memory usege as percent for Windows
+        - Disable  annoying service discovery rules which creates too mant false positive alerts.
     - Adds alexanderzobnin-zabbix-app datasource plugin to grafana.
     - Adds briangann-gauge-panel, btplc-trend-box-panel and jdbranham-diagram-panel plugins to grafana.
     - Invokes the grafana API to add custom Linux / Windows dashboards as well as Zabbix overall system status dashboard.
