@@ -614,49 +614,6 @@ cat <<EOF
 EOF
 }
 
-function AdminEmailPD() {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "user.update",
-    "params": {
-        "userid": "1",
-        "user_medias": [
-            {
-                "mediatypeid": "1",
-                "sendto": "$SentTo",
-                "active": 0,
-                "severity": 63,
-                "period": "1-7,00:00-24:00"
-            }
-        ]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Enable notification trigger action for administrators
-function NotifTriggerPD() {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "action.update",
-    "params": {
-        "actionid": 3,
-        "status": 0,
-        "def_shortdata": "PROBLEM: {TRIGGER.NAME}",
-        "def_longdata": "\n\nStarted: {EVENT.TIME} - {EVENT.DATE} \nHost: {HOST.NAME} - {HOST.IP1} \nLatest Value: {ITEM.LASTVALUE1} \nSeverity: {TRIGGER.SEVERITY} \n\nEvent Details: https://$ZBX_PUBLIC_IP:8443/tr_events.php?triggerid={TRIGGER.ID}&eventid={EVENT.ID} \nAcknowledge: https://$ZBX_PUBLIC_IP:8443/zabbix.php?action=acknowledge.edit&eventids[]={EVENT.ID}",
-        "r_shortdata": "RESOLVED: {TRIGGER.NAME}",
-        "r_longdata": "\n\nResolved: {EVENT.RECOVERY.TIME} - {EVENT.RECOVERY.DATE} \nHost: {HOST.NAME} - {HOST.IP1} \nLatest Value: {ITEM.LASTVALUE1} \nProblem Duration: {EVENT.AGE} \nSeverity: {TRIGGER.SEVERITY} \n\nEvent Details: https://$ZBX_PUBLIC_IP:8443/tr_events.php?triggerid={TRIGGER.ID}&eventid={EVENT.ID}"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
 # Slack related functions
 function GetSlackNotifAnswer(){
     while true
@@ -705,41 +662,24 @@ function GetSlackNotifAnswer(){
     fi
 }
 
-function EnableSlack(){
-
-# Create global macro for ZABBIX.URL
-ZabbixUrlGlobalMacroPD=$(
+# Globl Macro for ZABBIX.URL
+function ZabbixUrlGlobalMacroPD(){
 cat <<EOF
 {
     "jsonrpc": "2.0",
     "method": "usermacro.createglobal",
     "params":  {
-        "macro": "{$ZABBIX.URL}",
+        "macro": "{\$ZABBIX.URL}",
         "value": "https://$ZBX_PUBLIC_IP:8443/"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 1
 }
 EOF
-)
-    POST=$(curl -s --insecure \
-    -H "Accept: application/json" \
-    -H "Content-Type:application/json" \
-    -X POST --data "$(ZabbixUrlGlobalMacroPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+}
 
-    if [[ "$POST" == *"error"* ]]; then
-        echo -n "Creating a global macro for Zabbix URL:"
-        echo -ne "\t\t" && Failed
-        echo "An error occured. Please check the error output"
-        echo "$POST" |jq .
-        sleep 1
-        else
-        echo -n "Creating a global macro for Zabbix URL:"
-        echo -ne "\t\t" && Done
-        sleep 1
-    fi
-
-SetSlackBotTokenPD=$(
+# Slack bot token
+function SetSlackBotTokenPD(){
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -862,26 +802,33 @@ cat <<EOF
     "id": 1
 }
 EOF
-)
+}
 
-    POST=$(curl -s --insecure \
-    -H "Accept: application/json" \
-    -H "Content-Type:application/json" \
-    -X POST --data "$(SetSlackBotTokenPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+# User media type configuration
+function AdminSmtpMediaTypePD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "user.update",
+    "params": {
+        "userid": "1",
+        "user_medias": [
+            {
+                "mediatypeid": "1",
+                "sendto": "$SentTo",
+                "active": 0,
+                "severity": 63,
+                "period": "1-7,00:00-24:00"
+            }
+        ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
 
-    if [[ "$POST" == *"error"* ]]; then
-        echo -n "Adding bot token to slack medita type:"
-        echo -ne "\t\t" && Failed
-        echo "An error occured. Please check the error output"
-        echo "$POST" |jq .
-        sleep 1
-        else
-        echo -n "Adding bot token to slack medita type:"
-        echo -ne "\t\t" && Done
-        sleep 1
-    fi
-
-AddSlackMeditaTypetoAdminPD=$(
+function AdminSlackMediaTypePD(){
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -902,23 +849,56 @@ cat <<EOF
     "id": 0
 }
 EOF
-)
-    POST=$(curl -s --insecure \
-    -H "Accept: application/json" \
-    -H "Content-Type:application/json" \
-    -X POST --data "$(AddSlackMeditaTypetoAdminPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+}
 
-    if [[ "$POST" == *"error"* ]]; then
-        echo -n "Adding slack media type to admin user:"
-        echo -ne "\t\t" && Failed
-        echo "An error occured. Please check the error output"
-        echo "$POST" |jq .
-        sleep 1
-        else
-        echo -n "Adding slack media type to admin user:"
-        echo -ne "\t\t" && Done
-        sleep 1
-    fi
+function AdminSmtpSlackMediaTypePD(){
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "user.update",
+    "params": {
+        "userid": "1",
+        "user_medias": [
+            {
+                "mediatypeid": "9",
+                "sendto": "$SlackChannel",
+                "active": 0,
+                "severity": 63,
+                "period": "1-7,00:00-24:00"
+            },
+            {
+                "mediatypeid": "1",
+                "sendto": "$SentTo",
+                "active": 0,
+                "severity": 63,
+                "period": "1-7,00:00-24:00"
+            }
+        ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# notification trigger action for administrators
+function NotifTriggerPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "action.update",
+    "params": {
+        "actionid": 3,
+        "status": 0,
+        "def_shortdata": "PROBLEM: {TRIGGER.NAME}",
+        "def_longdata": "\n\nStarted: {EVENT.TIME} - {EVENT.DATE} \nHost: {HOST.NAME} - {HOST.IP1} \nLatest Value: {ITEM.LASTVALUE1} \nSeverity: {TRIGGER.SEVERITY} \n\nEvent Details: https://$ZBX_PUBLIC_IP:8443/tr_events.php?triggerid={TRIGGER.ID}&eventid={EVENT.ID} \nAcknowledge: https://$ZBX_PUBLIC_IP:8443/zabbix.php?action=acknowledge.edit&eventids[]={EVENT.ID}",
+        "r_shortdata": "RESOLVED: {TRIGGER.NAME}",
+        "r_longdata": "\n\nResolved: {EVENT.RECOVERY.TIME} - {EVENT.RECOVERY.DATE} \nHost: {HOST.NAME} - {HOST.IP1} \nLatest Value: {ITEM.LASTVALUE1} \nProblem Duration: {EVENT.AGE} \nSeverity: {TRIGGER.SEVERITY} \n\nEvent Details: https://$ZBX_PUBLIC_IP:8443/tr_events.php?triggerid={TRIGGER.ID}&eventid={EVENT.ID}"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
 }
 
 # API related
@@ -1156,6 +1136,7 @@ cat <<EOF
 EOF
 }
 
+### Grafana related
 function CreateGRFAPIKey () {
     GRF_API_KEY=$(curl --insecure -s \
     -H "Accept: application/json" \

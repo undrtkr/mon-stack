@@ -807,7 +807,7 @@ case "$1" in
             POST=$(curl -s --insecure \
             -H "Accept: application/json" \
             -H "Content-Type:application/json" \
-            -X POST --data "$(AdminEmailPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+            -X POST --data "$(AdminSmtpMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
 
             if [[ "$POST" == *"error"* ]]; then
                 echo -n "Set admin's email address:"
@@ -844,7 +844,77 @@ case "$1" in
         echo ""
         GetSlackNotifAnswer
         if [[ "$SlackEnable" =~ $yesPattern ]]; then
-            EnableSlack
+
+            GetZabbixAuthToken
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(ZabbixUrlGlobalMacroPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(SetSlackBotTokenPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+            if [[ "$POST" == *"error"* ]]; then
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Failed
+                echo "An error occured. Please check the error output"
+                echo "$POST" |jq .
+                sleep 1
+                else
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Done
+                sleep 1
+            fi
+
+            if [[ "$SMTPEnable" =~ $yesPattern ]]; then
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSmtpSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+            else
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+            fi
         else
             exit 0
         fi
@@ -853,9 +923,79 @@ case "$1" in
     enable-slack)
         ########## SLACK CONFIGURATION ##########
         echo ""
-                GetSlackNotifAnswer
+        GetSlackNotifAnswer
         if [[ "$SlackEnable" =~ $yesPattern ]]; then
-            EnableSlack
+
+            GetZabbixAuthToken
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(ZabbixUrlGlobalMacroPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(SetSlackBotTokenPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+            if [[ "$POST" == *"error"* ]]; then
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Failed
+                echo "An error occured. Please check the error output"
+                echo "$POST" |jq .
+                sleep 1
+                else
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Done
+                sleep 1
+            fi
+
+            if [[ "$SMTPEnable" =~ $yesPattern ]]; then
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSmtpSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+            else
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+            fi
         else
             exit 0
         fi
