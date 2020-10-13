@@ -96,7 +96,7 @@
         "targets": [
           {
             "application": {
-              "filter": "OS"
+              "filter": "Status"
             },
             "functions": [],
             "group": {
