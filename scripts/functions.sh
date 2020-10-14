@@ -3,15 +3,15 @@
 source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev/null 2>&1
 
 # Global functions
-function Done () {
+function Done() {
     echo -e '==> \E[32m'"\033\done\033[0m"
 }
 
-function Skip () {
+function Skip() {
     echo -e '==> \E[32m'"\033\skipped\033[0m"
 }
 
-function Failed () {
+function Failed() {
     echo -e '==> \E[91m'"\033\ failed\033[0m"
 }
 
@@ -38,12 +38,12 @@ function EchoDash() {
 echo "----------------------------------------------------------------"
 }
 
-function CheckZabbix {
+function CheckZabbix() {
     cd $BASEDIR
     status=$(docker-compose ps |egrep zabbix-server |egrep " Up " || echo "Not deployed")
     }
 
-function GetZabbixAuthToken () {
+function GetZabbixAuthToken() {
     ZBX_AUTH_TOKEN=$(curl --insecure -s \
     -H "Accept: application/json" \
     -H "Content-Type:application/json" \
@@ -318,7 +318,7 @@ EOF
 ########## ITEM AND TRIGGER CONFIGURATIONS ##########
 
 # Set interval to 5m for FS discovery in linux template
-function LLDFSRuleLinuxPD {
+function LLDFSRuleLinuxPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -334,7 +334,7 @@ EOF
 }
 
 # Set interval to 15m for network interface discovery in linux template
-function LLDNetIfRuleLinuxPD {
+function LLDNetIfRuleLinuxPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -350,7 +350,7 @@ EOF
 }
 
 # Set interval to 15m for total memory check in linux template
-function TotalMemoryCheckIntervalPD {
+function TotalMemoryCheckIntervalPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -367,7 +367,7 @@ EOF
 }
 
 # Set interval to 15m for total swap check in linux template
-function TotalSwapCheckIntervalPD {
+function TotalSwapCheckIntervalPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -384,7 +384,7 @@ EOF
 }
 
 # Add free disk space as percent for Linux hosts
-function FreeDiskSpacePercentLinuxPD {
+function FreeDiskSpacePercentLinuxPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -410,7 +410,7 @@ cat <<EOF
 EOF
 }
 
-function (FreeDiskSpacePercentWinPD){
+function FreeDiskSpacePercentWinPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -438,7 +438,7 @@ EOF
 }
 
 # Set interval to 15m for FS discovery for Windows template
-function LLDFSRuleWinPD {
+function LLDFSRuleWinPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -454,7 +454,7 @@ EOF
 }
 
 # Set interval to 15 for network interface discovery for Windows template
-function LLDNetIfRuleWinPD {
+function LLDNetIfRuleWinPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -471,7 +471,7 @@ EOF
 }
 
 # Add free memory usege as percent for Windows
-function FreeMemPercentWinPD {
+function FreeMemPercentWinPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -494,7 +494,7 @@ EOF
 }
 
 # Disable  annoying service discovery rules which creates too mant false positive alerts.
-function DisableAnnoyingWinServiceDiscovery {
+function DisableAnnoyingWinServiceDiscovery() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -513,7 +513,7 @@ EOF
 ##########  NOTIFICATIOS CONFIGURATIONS ##########
 
 # Email related functions
-function GetSMTPNotifAnswer(){
+function GetSMTPNotifAnswer() {
     while true
         do
         echo -e '\E[96m'"\033\ Do you want to enable email notification ? (Yes or No): \033[0m \c"
@@ -956,7 +956,7 @@ EOF
 }
 
 # API related
-function GetAPIUserGroupIDPD () {
+function GetAPIUserGroupIDPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -972,7 +972,7 @@ EOF
 }
 
 # Add user group for zabbix api user
-function CreateAPIUserGroupPD () {
+function CreateAPIUserGroupPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1118,7 +1118,7 @@ cat <<EOF
 EOF
 }
 
-function CreateAPIUserPD () {
+function CreateAPIUserPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1139,7 +1139,7 @@ EOF
 }
 
 # Zabbix server Host ID
-function GetHostIDPD () {
+function GetHostIDPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1153,7 +1153,7 @@ cat <<EOF
 EOF
 }
 
-function UpdateHostInterfacePD () {
+function UpdateHostInterfacePD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1173,7 +1173,7 @@ cat <<EOF
 EOF
 }
 
-function EnableZbxAgentonServerPD () {
+function EnableZbxAgentonServerPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1191,7 +1191,7 @@ EOF
 }
 
 ### Grafana related
-function CreateGRFAPIKey () {
+function CreateGRFAPIKey() {
     GRF_API_KEY=$(curl --insecure -s \
     -H "Accept: application/json" \
     -H "Content-Type:application/json" \
@@ -1203,7 +1203,7 @@ function CreateGRFAPIKey () {
      $GRF_SERVER_URL/api/auth/keys |jq .key |tr -d '"')
 }
 
-function CreateZbxDataSourcePD () {
+function CreateZbxDataSourcePD() {
 cat <<EOF
 {
         "orgId": 1,
