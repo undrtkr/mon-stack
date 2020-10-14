@@ -383,6 +383,60 @@ cat <<EOF
 EOF
 }
 
+# Add free disk space as percent for Linux hosts
+function FreeDiskSpacePercentLinuxPD {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "itemprototype.create",
+    "params": {
+        "name": "{#FSNAME}: Free Disk Space in %",
+        "key_": "vfs.fs.size[{#FSNAME},pfree]",
+		"value_type": "0",
+        "units": "%",
+        "hostid": "10273",
+        "ruleid": "29201",
+        "type": 0,
+        "delay": "1m",
+        "history": "1w",
+        "trends": "365d",
+        "status": "0",
+        "interfaceid": "0",
+        "applications": ["1143"]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+function (FreeDiskSpacePercentWinPD){
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "itemprototype.create",
+    "params": {
+        "name": "{#FSNAME}: Free space in %",
+        "key_": "vfs.fs.size[{#FSNAME},pfree]",
+		"value_type": "0",
+        "units": "%",
+        "hostid": "10288",
+        "ruleid": "29506",
+        "type": 0,
+        "delay": "1m",
+        "history": "1w",
+        "trends": "365d",
+        "status": "0",
+        "interfaceid": "0",
+        "applications": ["1204"],
+        "application_prototypes": [ "Filesystem {#FSNAME}" ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
 # Set interval to 15m for FS discovery for Windows template
 function LLDFSRuleWinPD {
 cat <<EOF

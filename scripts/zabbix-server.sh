@@ -299,6 +299,32 @@ case "$1" in
             echo -ne "\t\t" && Done
             sleep 1
         fi
+
+        sleep 1
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(FreeDiskSpacePercentLinuxPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Skip
+            else
+                echo ""
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create an item protoype to get free disk space as percentage for all partitions:" && \
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+
         sleep 1
 
         POST=$(curl -s --insecure \
@@ -372,6 +398,31 @@ case "$1" in
 
         echo -e ""
         echo -e '\E[96m'"\033\- Tune Windows OS Template.\033[0m"
+        sleep 1
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(FreeDiskSpacePercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Skip
+            else
+                echo ""
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create an item protoype to get free disk space as percentage for all partitions:" && \
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+
         sleep 1
 
         POST=$(curl -s --insecure \
