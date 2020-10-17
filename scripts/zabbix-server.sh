@@ -743,27 +743,6 @@ case "$1" in
             sleep 1
         fi
 
-        # Import zabbix server dashboard
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type: application/json;charset=UTF-8" \
-        -H "Authorization:Bearer $GRF_API_KEY" \
-        -d "@../grafana_dashboards/zabbix_server_dashboard.json" \
-        -X POST "$GRF_SERVER_URL/api/dashboards/db" |jq .)
-
-        if [[ "$POST" == *"success"* ]]; then
-            echo -n "Import zabbix server dashboard:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        else
-            echo ""
-            echo -n "Import zabbix server dashboard:"
-            echo -ne "\t\t" && Failed
-            echo -n "An error occured. Please check the error output"
-            echo $POST |jq .
-            sleep 1
-        fi
-
         # Import Linux servers dashboard
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
