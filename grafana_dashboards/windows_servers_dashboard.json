@@ -142,7 +142,7 @@
                   }
                }
             ],
-            "title":"UPTIME",
+            "title":"Uptime",
             "type":"stat"
          },
          {
@@ -249,7 +249,7 @@
                   }
                }
             ],
-            "title":"NUMBER OF CPUs",
+            "title":"Number of cores",
             "type":"stat"
          },
          {
@@ -356,7 +356,7 @@
                   }
                }
             ],
-            "title":"TOTAL MEMORY",
+            "title":"Total Memory",
             "type":"stat"
          },
          {
@@ -463,7 +463,7 @@
                   }
                }
             ],
-            "title":"TOTAL STORAGE",
+            "title":"Total Storage",
             "type":"stat"
          },
          {
