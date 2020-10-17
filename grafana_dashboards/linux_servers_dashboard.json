@@ -1221,7 +1221,7 @@
                      "filter":"$group"
                   },
                   "host":{
-                     "filter":"$group"
+                     "filter":"$host"
                   },
                   "item":{
                      "filter":""
