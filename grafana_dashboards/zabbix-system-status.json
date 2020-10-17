@@ -375,9 +375,10 @@
       "30d"
     ]
   },
-  "timezone": "",
+  "timezone": "browser",
   "title": "Zabbix System Status",
-  "uid": "000000087",
-  "version": 2
+  "uid": null,
+  "id": null,
+  "version": null
   }
 }
