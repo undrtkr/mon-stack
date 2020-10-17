@@ -38,6 +38,23 @@ function EchoDash() {
 echo "----------------------------------------------------------------"
 }
 
+function FinisMessage() {
+        echo ""
+        echo -e '\E[1m'"\033\Zabbix installation successfuly finished.\033[0m"
+        echo "-----------------------------------------------------------------"
+        echo ""
+        echo -e '\E[1m'"\033\Zabbix UI is accessible at https://ip:8443 \033[0m"
+        echo -e '\E[1m'"\033\Username: Admin \033[0m"
+        echo -e '\E[1m'"\033\Pasword: zabbix (Don't forget to change it!)\033[0m"
+        echo ""
+        echo -e '\E[1m'"\033\Grafana UI is accessible at https://ip:3000 \033[0m"
+        echo -e '\E[1m'"\033\Username: admin \033[0m"
+        echo -e '\E[1m'"\033\Pasword: zabbix (Don't forget to change it too!)\033[0m"
+        echo "-----------------------------------------------------------------"
+        echo ""
+        echo -e '\E[1m'"\033\For any contribution or issue reporting please visit https://bitbucket.org/secopstech/zabbix-server/issues.\033[0m"
+}
+
 function CheckZabbix() {
     cd $BASEDIR
     status=$(docker-compose ps |egrep zabbix-server |egrep " Up " || echo "Not deployed")

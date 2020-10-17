@@ -925,6 +925,7 @@ case "$1" in
                     else
                     echo -n "Adding slack and smtp media types to admin user:"
                     echo -ne "\t\t" && Done
+                    FinisMessage
                     sleep 1
                 fi
             else
@@ -942,10 +943,12 @@ case "$1" in
                     else
                     echo -n "Adding slack media type to admin user:"
                     echo -ne "\t\t" && Done
+                    FinisMessage
                     sleep 1
                 fi
             fi
         else
+            FinisMessage
             exit 0
         fi
     ;;
