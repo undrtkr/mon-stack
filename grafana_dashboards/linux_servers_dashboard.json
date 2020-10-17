@@ -5053,7 +5053,7 @@
             "showTags":false,
             "sortProblems":"lastchange",
             "statusField":true,
-            "statusIcon":true,
+            "statusIcon":false,
             "targets":[
                {
                   "application":{
@@ -5063,10 +5063,10 @@
 
                   ],
                   "group":{
-                     "filter":""
+                     "filter":"$group"
                   },
                   "host":{
-                     "filter":""
+                     "filter":"$group"
                   },
                   "item":{
                      "filter":""

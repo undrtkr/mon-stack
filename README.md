@@ -13,12 +13,12 @@ Here's the summary:
     - Creates a bunch of hosts group.
     - Creates auto registration actions for Linux and Windows hosts.
     - Tune Linux / Windows Templates items: 
-        - Set interval to 5m for FS discovery in linux template
-        - Set interval to 15m for network interface discovery in linux template
-        - Set interval to 15m for total memory check in linux template
-        - Set interval to 15m for total swap check in linux template
-        - Set interval to 15m for FS discovery for Windows template
-        - Set interval to 15 for network interface discovery for Windows template
+        - Set interval to 30m for FS discovery in linux template
+        - Set interval to 30m for network interface discovery in linux template
+        - Set interval to 30m for total memory check in linux template
+        - Set interval to 30m for total swap check in linux template
+        - Set interval to 30m for FS discovery for Windows template
+        - Set interval to 30m for network interface discovery for Windows template
         - Add free memory usege as percent for Windows
         - Disable  annoying service discovery rules which creates too mant false positive alerts.
     - Adds alexanderzobnin-zabbix-app datasource plugin to grafana.

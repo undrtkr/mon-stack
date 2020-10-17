@@ -288,14 +288,14 @@ case "$1" in
                 echo -ne "\t\t" && Skip
             else
                 echo ""
-                echo -n "Set filesystem discovery LLD interval to 15m:"
+                echo -n "Set filesystem discovery LLD interval to 30m:"
                 echo -ne "\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set filesystem discovery LLD interval to 15m:" && \
+            echo -n "Set filesystem discovery LLD interval to 30m:" && \
             echo -ne "\t\t" && Done
             sleep 1
         fi
@@ -334,10 +334,10 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 15m."
+                echo -n "LLD rule is already set to 30m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set netif discovery LLD interval to 15m:"
+                echo -n "Set netif discovery LLD interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
@@ -357,17 +357,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total memory check interval is already set to 15m."
+                echo -n "Total memory check interval is already set to 30m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total memory check interval to 15m:"
+                echo -n "Set total memory check interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total memory check interval to 15m:"
+            echo -n "Set total memory check interval to 30m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -380,17 +380,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total swap check interval is already set to 15m."
+                echo -n "Total swap check interval is already set to 30m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total swap check interval to 15m:"
+                echo -n "Set total swap check interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total swap check interval to 15m:"
+            echo -n "Set total swap check interval to 30m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -432,18 +432,18 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 15m."
+                echo -n "LLD rule is already set to 30m."
                 echo -ne "\t\t" && Skip
             else
                 echo ""
-                echo -n "Set filesystem discovery LLD interval to 15m:"
+                echo -n "Set filesystem discovery LLD interval to 30m:"
                 echo -ne "\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set filesystem discovery LLD interval to 15m:" && \
+            echo -n "Set filesystem discovery LLD interval to 30m:" && \
             echo -ne "\t\t" && Done
             sleep 1
         fi
@@ -456,17 +456,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 15m."
+                echo -n "LLD rule is already set to 30m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set netif discovery LLD interval to 15m:"
+                echo -n "Set netif discovery LLD interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set netif discovery LLD interval to 15m:"
+            echo -n "Set netif discovery LLD interval to 30m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi

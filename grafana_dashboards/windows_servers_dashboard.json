@@ -4849,7 +4849,7 @@
 
                   ],
                   "group":{
-                     "filter":""
+                     "filter":"$group"
                   },
                   "host":{
                      "filter":"$host"

@@ -317,7 +317,7 @@ EOF
 
 ########## ITEM AND TRIGGER CONFIGURATIONS ##########
 
-# Set interval to 5m for FS discovery in linux template
+# Set interval to 30m for FS discovery in linux template
 function LLDFSRuleLinuxPD() {
 cat <<EOF
 {
@@ -325,7 +325,7 @@ cat <<EOF
     "method": "discoveryrule.update",
     "params": {
         "itemid": "29201",
-        "delay": "5m"
+        "delay": "30m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -333,7 +333,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 15m for network interface discovery in linux template
+# Set interval to 30m for network interface discovery in linux template
 function LLDNetIfRuleLinuxPD() {
 cat <<EOF
 {
@@ -341,7 +341,7 @@ cat <<EOF
     "method": "discoveryrule.update",
     "params": {
         "itemid": "29203",
-        "delay": "15m"
+        "delay": "30m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -349,7 +349,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 15m for total memory check in linux template
+# Set interval to 30m for total memory check in linux template
 function TotalMemoryCheckIntervalPD() {
 cat <<EOF
 {
@@ -358,7 +358,7 @@ cat <<EOF
     "params": {
     	"hostid": "10274",
         "itemid": "29104",
-        "delay": "15m"
+        "delay": "30m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -366,7 +366,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 15m for total swap check in linux template
+# Set interval to 30m for total swap check in linux template
 function TotalSwapCheckIntervalPD() {
 cat <<EOF
 {
@@ -375,7 +375,7 @@ cat <<EOF
     "params": {
     	"hostid": "10274",
         "itemid": "29106",
-        "delay": "15m"
+        "delay": "30m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -437,7 +437,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 15m for FS discovery for Windows template
+# Set interval to 30m for FS discovery for Windows template
 function LLDFSRuleWinPD() {
 cat <<EOF
 {
@@ -445,7 +445,7 @@ cat <<EOF
     "method": "discoveryrule.update",
     "params": {
         "itemid": "29509",
-        "delay": "15m"
+        "delay": "30m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -453,7 +453,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 15 for network interface discovery for Windows template
+# Set interval to 30m for network interface discovery for Windows template
 function LLDNetIfRuleWinPD() {
 cat <<EOF
 {
@@ -462,7 +462,7 @@ cat <<EOF
     "params": {
     	"hostid": "10081",
         "itemid": "31456",
-        "delay": "15m"
+        "delay": "30m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
