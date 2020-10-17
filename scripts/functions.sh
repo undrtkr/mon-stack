@@ -427,6 +427,26 @@ cat <<EOF
 EOF
 }
 
+# Set interval to 30m for Number of Cpus item for linux template (also we're going to remove its current preprocessing
+# in order to get this value from Grafana
+function NumberofCpusIntervalPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "item.update",
+    "params": {
+    	"hostid": "10272",
+        "itemid": "29087",
+        "delay": "30m",
+        "preprocessing": [
+        ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
 function FreeDiskSpacePercentWinPD() {
 cat <<EOF
 {
@@ -1241,7 +1261,8 @@ cat <<EOF
             "keepCookies": [],
             "password": "zabbix",
             "tlsSkipVerify": true,
-            "username": "apiuser"
+            "username": "apiuser",
+            "cacheTTL": "5m"
         },
         "readOnly": false
 }

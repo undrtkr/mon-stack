@@ -394,6 +394,28 @@ case "$1" in
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(NumberofCpusIntervalPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Number of CPUs interval is already set to 30m."
+                echo -ne "\t\t\t\t" && Skip
+            else
+                echo -n "Set Number of CPUs interval to 30m:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Set Number of CPUs interval to 30m:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
         EchoDash
 
         echo -e ""
