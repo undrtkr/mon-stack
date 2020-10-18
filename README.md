@@ -15,7 +15,7 @@ Here's the summary:
     - Tune Linux / Windows Templates items: 
         - Set FS discovery interval 30m for linux template
         - Set network interface discovery interval 30m for linux template
-        - Set total memory check interval 30m for linux template
+        - Set total memory check interval 5m for linux template
         - Set total swap check interval 30m for linux template
         - Set Number of CPUs interval 30m for linux template.
         - Set FS discovery interval 30m for Windows template
@@ -586,7 +586,7 @@ Create available memory in % item for Linux:		... done
 Create CPU count item for Linux:			... done
 Set filesystem discovery LLD interval to 5m:		... done
 Set netif discovery LLD interval to 5m:			... done
-Set total memory check interval to 10m:			... done
+Set total memory check interval to 5m:			... done
 Set total swap check interval to 10m:			... done
 ----------------------------------------------------------------
 

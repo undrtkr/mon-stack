@@ -366,7 +366,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 30m for total memory check in linux template
+# Set interval to 5m for total memory check in linux template
 function TotalMemoryCheckIntervalPD() {
 cat <<EOF
 {
@@ -375,7 +375,7 @@ cat <<EOF
     "params": {
     	"hostid": "10274",
         "itemid": "29104",
-        "delay": "30m"
+        "delay": "5m"
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -427,7 +427,7 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 30m for Number of Cpus item for linux template (also we're going to remove its current preprocessing
+# Set interval to 5m for Number of Cpus item for linux template (also we're going to remove its current preprocessing
 # in order to get this value from Grafana
 function NumberofCpusIntervalPD() {
 cat <<EOF
@@ -437,7 +437,7 @@ cat <<EOF
     "params": {
     	"hostid": "10272",
         "itemid": "29087",
-        "delay": "30m",
+        "delay": "5m",
         "preprocessing": [
         ]
     },

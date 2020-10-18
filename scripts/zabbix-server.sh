@@ -357,17 +357,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total memory check interval is already set to 30m."
+                echo -n "Total memory check interval is already set to 5m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total memory check interval to 30m:"
+                echo -n "Set total memory check interval to 5m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total memory check interval to 30m:"
+            echo -n "Set total memory check interval to 5m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -402,17 +402,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Number of CPUs interval is already set to 30m."
+                echo -n "Number of CPUs interval is already set to 5m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set Number of CPUs interval to 30m:"
+                echo -n "Set Number of CPUs interval to 5m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set Number of CPUs interval to 30m:"
+            echo -n "Set Number of CPUs interval to 5m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi

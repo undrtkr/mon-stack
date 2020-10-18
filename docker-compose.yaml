@@ -242,6 +242,8 @@ services:
    ports:
      - "3000:3000"
    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/timezone:/etc/timezone:ro
      - ./zbx_env/etc/ssl/grafana:/etc/ssl/grafana:ro
      - ./configs/.grafana.ini:/etc/grafana/grafana.ini
      - grafana-data:/var/lib/grafana:rw
