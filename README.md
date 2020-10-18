@@ -73,11 +73,9 @@ Note: Both services are served over https by using a self-signed certificate.
 ### Overall system status dashboard
 ![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/overall-system-status.png "Overall system status")
 
-### Example slack alert for a problem notification
-![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/slack-notification1.png "Slack notification - problem")
+### Example slack alerts
+![alt text](https://bitbucket.org/secopstech/zabbix-server/src/master/screenshots/slack-notification.png "Slack notification")
 
-### Example slack alert for a resolve notification
-![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/slack-notification2.png "Slack notification - resolved")
 
 ## Example output
 
