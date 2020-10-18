@@ -62,19 +62,19 @@ Note: Both services are served over https by using a self-signed certificate.
 ## Screenshots
 
 ### Insight Panel:
-![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/linux-insight.png "Insight")
+![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/9b33457148fe7dcc761206653571419e35bfeb2b/screenshots/linux-insight.png "Insight")
 
 ### CPU and Memory Graphs
-![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/linux-cpu-mem.png "CPU and Memory Graphs")
+![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/9b33457148fe7dcc761206653571419e35bfeb2b/screenshots/linux-cpu-mem.png "CPU and Memory Graphs")
 
 ### Filesystem and Network Interfaces Graphs
-![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/linux-fs-netif.png "Filesystem and Network Interfaces Graph")
+![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/9b33457148fe7dcc761206653571419e35bfeb2b/screenshots/linux-fs-netif.png "Filesystem and Network Interfaces Graph")
 
 ### Overall system status dashboard
-![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/cd3b78150db35a6de1fbd4c1fdcc000c65d15373/screenshots/overall-system-status.png "Overall system status")
+![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/9b33457148fe7dcc761206653571419e35bfeb2b/screenshots/overall-system-status.png "Overall system status")
 
 ### Example slack alerts
-![alt text](https://bitbucket.org/secopstech/zabbix-server/src/master/screenshots/slack-notification.png "Slack notification")
+![alt text](https://bitbucket.org/secopstech/zabbix-server/raw/9b33457148fe7dcc761206653571419e35bfeb2b/screenshots/slack-notification.png "Slack notification")
 
 
 ## Example output
