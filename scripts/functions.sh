@@ -3,16 +3,16 @@
 source ./scripts/environmets.sh > /dev/null 2>&1 || source environmets.sh > /dev/null 2>&1
 
 # Global functions
-function Done () {
-    echo -e '... \E[32m'"\033\done\033[0m"
+function Done() {
+    echo -e '==> \E[32m'"\033\done\033[0m"
 }
 
-function Skip () {
-    echo -e '... \E[32m'"\033\skipped\033[0m"
+function Skip() {
+    echo -e '==> \E[32m'"\033\skipped\033[0m"
 }
 
-function Failed () {
-    echo -e '... \E[91m'"\033\ failed\033[0m"
+function Failed() {
+    echo -e '==> \E[91m'"\033\ failed\033[0m"
 }
 
 function GetConfirmation() {
@@ -38,12 +38,29 @@ function EchoDash() {
 echo "----------------------------------------------------------------"
 }
 
-function CheckZabbix {
+function FinisMessage() {
+        echo ""
+        echo -e '\E[1m'"\033\Zabbix installation successfuly finished.\033[0m"
+        echo "-----------------------------------------------------------------"
+        echo ""
+        echo -e '\E[1m'"\033\Zabbix UI is accessible at https://ip:8443 \033[0m"
+        echo -e '\E[1m'"\033\Username: Admin \033[0m"
+        echo -e '\E[1m'"\033\Pasword: zabbix (Don't forget to change it!)\033[0m"
+        echo ""
+        echo -e '\E[1m'"\033\Grafana UI is accessible at https://ip:3000 \033[0m"
+        echo -e '\E[1m'"\033\Username: admin \033[0m"
+        echo -e '\E[1m'"\033\Pasword: zabbix (Don't forget to change it too!)\033[0m"
+        echo "-----------------------------------------------------------------"
+        echo ""
+        echo -e '\E[1m'"\033\For any contribution or issue reporting please visit https://bitbucket.org/secopstech/zabbix-server/issues.\033[0m"
+}
+
+function CheckZabbix() {
     cd $BASEDIR
     status=$(docker-compose ps |egrep zabbix-server |egrep " Up " || echo "Not deployed")
     }
 
-function GetZabbixAuthToken () {
+function GetZabbixAuthToken() {
     ZBX_AUTH_TOKEN=$(curl --insecure -s \
     -H "Accept: application/json" \
     -H "Content-Type:application/json" \
@@ -316,25 +333,93 @@ EOF
 }
 
 ########## ITEM AND TRIGGER CONFIGURATIONS ##########
-function DiskUsedPercentLinuxPD {
+
+# Set interval to 30m for FS discovery in linux template
+function LLDFSRuleLinuxPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "discoveryrule.update",
+    "params": {
+        "itemid": "29201",
+        "delay": "30m"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Set interval to 30m for network interface discovery in linux template
+function LLDNetIfRuleLinuxPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "discoveryrule.update",
+    "params": {
+        "itemid": "29203",
+        "delay": "30m"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Set interval to 5m for total memory check in linux template
+function TotalMemoryCheckIntervalPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "item.update",
+    "params": {
+    	"hostid": "10274",
+        "itemid": "29104",
+        "delay": "5m"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Set interval to 30m for total swap check in linux template
+function TotalSwapCheckIntervalPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "item.update",
+    "params": {
+    	"hostid": "10274",
+        "itemid": "29106",
+        "delay": "30m"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Add free disk space as percent for Linux hosts
+function FreeDiskSpacePercentLinuxPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
     "method": "itemprototype.create",
     "params": {
-        "name": "Used disk space on \$1 (percentage)",
-        "key_": "vfs.fs.size[{#FSNAME},pused]",
+        "name": "{#FSNAME}: Free Disk Space in %",
+        "key_": "vfs.fs.size[{#FSNAME},pfree]",
 		"value_type": "0",
         "units": "%",
-        "hostid": "10001",
-        "ruleid": "22450",
+        "hostid": "10273",
+        "ruleid": "29201",
         "type": 0,
         "delay": "1m",
         "history": "1w",
         "trends": "365d",
         "status": "0",
         "interfaceid": "0",
-        "applications": [5]
+        "applications": ["1143"]
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -342,156 +427,19 @@ cat <<EOF
 EOF
 }
 
-function CreateLinuxCPULoadAllCoreItems {
-GetZabbixAuthToken
-INTERVAL="1 5 15"
-for i in $INTERVAL
-do
-LinuxCPULoadAllCorePD=$(cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Processor load ($i min average all core)",
-        "key_": "system.cpu.load[all,avg$i]",
-        "hostid": "10001",
-        "type": 0,
-        "value_type": 0,
-        "interfaceid": "0",
-        "applications": ["13"],
-        "delay": "1m",
-		"history": "1w",
-        "trends": "365d",
-		"description": "The processor load is cumulative system CPU load.",
-        "status": "0"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-)
-
-POST=$(curl -s --insecure \
--H "Accept: application/json" \
--H "Content-Type:application/json" \
--X POST --data "$LinuxCPULoadAllCorePD" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-if [[ "$POST" == *"error"* ]]; then
-    if [[ "$POST" == *"already exists"* ]]; then
-        echo -n "Item $i min CPU load is already exists"
-        echo -ne "\t\t" && Skip
-    else
-        echo ""
-        echo -n "Create item for $i min CPU load on all cores:"
-        echo -ne "\t" && Failed
-        echo -n "An error occured. Please check the error output"
-        echo $POST |jq .
-        sleep 1
-    fi
-else
-    echo -n "Create item for $i min CPU load on all cores:"
-    echo -ne "\t\t" && Done
-    sleep 1
-fi
-done
-}
-
-# Create total cpu count item for Linux
-function AvailMemoryPercentLinuxItemPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Available memory in %",
-        "key_": "vm.memory.size[pavailable]",
-		"value_type": "0",
-        "units": "%",
-        "hostid": "10001",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [15]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Total cpu count item for Linux
-function NumOfCPULinuxItemPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Number of CPU",
-        "key_": "system.cpu.num[online]",
-		"value_type": "0",
-        "units": "",
-        "hostid": "10001",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [13]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Set interval to 5m for FS discovery in linux template
-function LLDFSRuleLinuxPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "discoveryrule.update",
-    "params": {
-    	"hostid": "10001",
-        "itemid": "22450",
-        "delay": "5m"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Set interval to 5m for network interface discovery in linux template
-function LLDNetIfRuleLinuxPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "discoveryrule.update",
-    "params": {
-    	"hostid": "10001",
-        "itemid": "22444",
-        "delay": "5m"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Set interval to 10m for total memory check in linux template
-function TotalMemoryCheckIntervalPD {
+# Set interval to 5m for Number of Cpus item for linux template (also we're going to remove its current preprocessing
+# in order to get this value from Grafana
+function NumberofCpusIntervalPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
-    	"hostid": "10001",
-        "itemid": "10026",
-        "delay": "10m"
+    	"hostid": "10272",
+        "itemid": "29087",
+        "delay": "5m",
+        "preprocessing": [
+        ]
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -499,103 +447,26 @@ cat <<EOF
 EOF
 }
 
-# Set interval to 10m for total swap check in linux template
-function TotalSwapCheckIntervalPD {
+function FreeDiskSpacePercentWinPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
-    "method": "item.update",
+    "method": "itemprototype.create",
     "params": {
-    	"hostid": "10001",
-        "itemid": "10030",
-        "delay": "10m"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Create total cpu count item for Windows
-function CreateNumOfCPUWinItemPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "Number of CPU",
-        "key_": "system.cpu.num[online]",
-		"value_type": "0",
-        "units": "",
-        "hostid": "10081",
-        "type": 0,
-        "delay": "1m",
-        "history": "1w",
-        "trends": "365d",
-        "status": "0",
-        "interfaceid": "0",
-        "applications": [325]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-
-# Set interval to 5m for FS discovery for Windows template
-function LLDFSRuleWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "discoveryrule.update",
-    "params": {
-    	"hostid": "10081",
-        "itemid": "23162",
-        "delay": "5m"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Set interval to 5m for network interface discovery for Windows template
-function LLDNetIfRuleWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "discoveryrule.update",
-    "params": {
-    	"hostid": "10081",
-        "itemid": "23163",
-        "delay": "5m"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Create total cpu count item for Windows
-function CPUUtilWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "item.create",
-    "params": {
-        "name": "CPU Utilization",
-        "key_": "system.cpu.util",
+        "name": "{#FSNAME}: Free space in %",
+        "key_": "vfs.fs.size[{#FSNAME},pfree]",
 		"value_type": "0",
         "units": "%",
-        "hostid": "10081",
+        "hostid": "10288",
+        "ruleid": "29506",
         "type": 0,
         "delay": "1m",
         "history": "1w",
         "trends": "365d",
         "status": "0",
         "interfaceid": "0",
-        "applications": [325]
+        "applications": ["1204"],
+        "application_prototypes": [ "Filesystem {#FSNAME}" ]
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -603,19 +474,55 @@ cat <<EOF
 EOF
 }
 
-# Update free memory user as percent for Windows
-function FreeMemPercentWinPD {
+# Set interval to 30m for FS discovery for Windows template
+function LLDFSRuleWinPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "discoveryrule.update",
+    "params": {
+        "itemid": "29509",
+        "delay": "30m"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Set interval to 30m for network interface discovery for Windows template
+function LLDNetIfRuleWinPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
     "method": "item.update",
     "params": {
     	"hostid": "10081",
-        "itemid": "23158",
+        "itemid": "31456",
+        "delay": "30m"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# Add free memory usege as percent for Windows
+function FreeMemPercentWinPD() {
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "item.create",
+    "params": {
+   	    "hostid": "10287",
         "name": "Free memory in %",
         "key_": "vm.memory.size[pavailable]",
 		"value_type": 0,
-        "units": "%"
+		"type": 0,
+        "units": "%",
+        "delay": "1m",
+        "status": 0,
+        "applications": ["1203"]
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
@@ -623,50 +530,15 @@ cat <<EOF
 EOF
 }
 
-# Delete free memory trigger for Windows
-function ExistingFreeMemTriggerWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "trigger.delete",
-    "params": [
-        "13433"
-    ],
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-# Delete free memory trigger for Windows
-function NewFreeMemTriggerWinPD {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "trigger.create",
-    "params": {
-		"description": "Lack of free memory on server {HOST.NAME}",
-        "expression": "{Template OS Windows:vm.memory.size[pavailable].last(0)}<10",
-        "expression_constructor": "0",
-        "recovery_expression_constructor": "0",
-        "status": "0",
-        "priority": "3",
-        "type": "0"
-        },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-function DisableAnnoyingWinServiceDiscovery {
+# Disable  annoying service discovery rules which creates too mant false positive alerts.
+function DisableAnnoyingWinServiceDiscovery() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
     "method": "discoveryrule.update",
     "params": {
 		"hostid": "10081",
-        "itemid": "23665",
+        "itemid": "30424",
         "status": "1"
     },
     "auth": "$ZBX_AUTH_TOKEN",
@@ -678,7 +550,7 @@ EOF
 ##########  NOTIFICATIOS CONFIGURATIONS ##########
 
 # Email related functions
-function GetSMTPNotifAnswer(){
+function GetSMTPNotifAnswer() {
     while true
         do
         echo -e '\E[96m'"\033\ Do you want to enable email notification ? (Yes or No): \033[0m \c"
@@ -833,7 +705,198 @@ cat <<EOF
 EOF
 }
 
-function AdminEmailPD() {
+# Slack related functions
+function GetSlackNotifAnswer(){
+    while true
+    do
+        echo -e '\E[96m'"\033\ Do you want to enable slack notifications ? (Yes or No): \033[0m \c"
+        read  SlackEnable
+        case $SlackEnable in
+        Yes|yes|YES|YeS|yeS|yEs) break ;;
+        No|no|NO|nO) break ;;
+        *) echo -e '\E[91m'"\033\ Please type Yes or No \033[0m"
+        esac
+    done
+    if [[ "$SlackEnable" =~ $yesPattern ]]; then
+        echo -e ""
+        echo -e '\E[96m'"\033\- Slack settings. \033[0m"
+        echo -e '\E[1m'"\033\This section, enables slack notification. \033[0m"
+
+        echo -e '\E[1m'"\033\An slack app must be created within your Slack.com workspace \033[0m"
+        echo -e '\E[1m'"\033\as explained at https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/media/slack \033[0m"
+        echo -e '\E[1m'"\033\Please create the slack app now and provide its Bot User OAuth Access Token, and slack channel name.\033[0m"
+        echo ""
+        sleep 1
+
+        # Get Bot Token
+        echo -e '\E[96m'"\033\ Enter your Bot User OAuth Access Token: \033[0m \c"
+        read SlackBotToken
+        while [[ -z $SlackBotToken ]]
+        do
+          echo -e '\E[91m'"\033\ Please enter your Bot User OAuth Access Token:\033[0m \c"
+          read SlackBotToken
+        done
+
+        # Get slack channel name to send notifications
+        echo -e '\E[96m'"\033\ Enter your slack channel: \033[0m \c"
+        read SlackChannel
+        while [[ -z $SlackChannel ]]
+        do
+          echo -e '\E[91m'"\033\ Please enter your channel:\033[0m \c"
+          read SlackChannel
+        done
+        SlackChannel="#$SlackChannel"
+    else
+        echo -n "Slack notification configuration:" && \
+        echo -ne "\t\t" && Skip
+        sleep 1
+    fi
+}
+
+# Globl Macro for ZABBIX.URL
+function ZabbixUrlGlobalMacroPD(){
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "usermacro.createglobal",
+    "params":  {
+        "macro": "{\$ZABBIX.URL}",
+        "value": "https://$ZBX_PUBLIC_IP:8443/"
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 1
+}
+EOF
+}
+
+# Slack bot token
+function SetSlackBotTokenPD(){
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "mediatype.update",
+    "params": {
+        "mediatypeid": "9",
+        "status": 0,
+        "parameters": [
+                {
+                    "name": "zabbix_url",
+                    "value": "https://ZBX_PUBLIC_IP:8443"
+                },
+                {
+                    "name": "bot_token",
+                    "value": "$SlackBotToken"
+                },
+                {
+                    "name": "channel",
+                    "value": "{ALERT.SENDTO}"
+                },
+                {
+                    "name": "slack_mode",
+                    "value": "alarm"
+                },
+                {
+                    "name": "slack_as_user",
+                    "value": "true"
+                },
+                {
+                    "name": "event_tags",
+                    "value": "{EVENT.TAGS}"
+                },
+                {
+                    "name": "event_nseverity",
+                    "value": "{EVENT.NSEVERITY}"
+                },
+                {
+                    "name": "event_value",
+                    "value": "{EVENT.VALUE}"
+                },
+                {
+                    "name": "event_update_status",
+                    "value": "{EVENT.UPDATE.STATUS}"
+                },
+                {
+                    "name": "event_date",
+                    "value": "{EVENT.DATE}"
+                },
+                {
+                    "name": "event_time",
+                    "value": "{EVENT.TIME}"
+                },
+                {
+                    "name": "event_severity",
+                    "value": "{EVENT.SEVERITY}"
+                },
+                {
+                    "name": "event_opdata",
+                    "value": "{EVENT.OPDATA}"
+                },
+                {
+                    "name": "event_id",
+                    "value": "{EVENT.ID}"
+                },
+                {
+                    "name": "trigger_id",
+                    "value": "{TRIGGER.ID}"
+                },
+                {
+                    "name": "trigger_description",
+                    "value": "{TRIGGER.DESCRIPTION}"
+                },
+                {
+                    "name": "host_name",
+                    "value": "{HOST.HOST}"
+                },
+                {
+                    "name": "event_update_date",
+                    "value": "{EVENT.UPDATE.DATE}"
+                },
+                {
+                    "name": "event_update_time",
+                    "value": "{EVENT.UPDATE.TIME}"
+                },
+                {
+                    "name": "event_recovery_date",
+                    "value": "{EVENT.RECOVERY.DATE}"
+                },
+                {
+                    "name": "event_recovery_time",
+                    "value": "{EVENT.RECOVERY.TIME}"
+                },
+                {
+                    "name": "alert_message",
+                    "value": "{ALERT.MESSAGE}"
+                },
+                {
+                    "name": "alert_subject",
+                    "value": "{ALERT.SUBJECT}"
+                },
+                {
+                    "name": "discovery_host_dns",
+                    "value": "{DISCOVERY.DEVICE.DNS}"
+                },
+                {
+                    "name": "discovery_host_ip",
+                    "value": "{DISCOVERY.DEVICE.IPADDRESS}"
+                },
+                {
+                    "name": "event_source",
+                    "value": "{EVENT.SOURCE}"
+                },
+                {
+                    "name": "host_conn",
+                    "value": "{HOST.CONN}"
+                }
+            ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 1
+}
+EOF
+}
+
+# User media type configuration
+function AdminSmtpMediaTypePD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -856,7 +919,60 @@ cat <<EOF
 EOF
 }
 
-# Enable notification trigger action for administrators
+function AdminSlackMediaTypePD(){
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "user.update",
+    "params": {
+        "userid": "1",
+        "user_medias": [
+            {
+                "mediatypeid": "9",
+                "sendto": "$SlackChannel",
+                "active": 0,
+                "severity": 63,
+                "period": "1-7,00:00-24:00"
+            }
+        ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+function AdminSmtpSlackMediaTypePD(){
+cat <<EOF
+{
+    "jsonrpc": "2.0",
+    "method": "user.update",
+    "params": {
+        "userid": "1",
+        "user_medias": [
+            {
+                "mediatypeid": "9",
+                "sendto": "$SlackChannel",
+                "active": 0,
+                "severity": 63,
+                "period": "1-7,00:00-24:00"
+            },
+            {
+                "mediatypeid": "1",
+                "sendto": "$SentTo",
+                "active": 0,
+                "severity": 63,
+                "period": "1-7,00:00-24:00"
+            }
+        ]
+    },
+    "auth": "$ZBX_AUTH_TOKEN",
+    "id": 0
+}
+EOF
+}
+
+# notification trigger action for administrators
 function NotifTriggerPD() {
 cat <<EOF
 {
@@ -876,128 +992,8 @@ cat <<EOF
 EOF
 }
 
-# Slack related functions
-function GetSlackNotifAnswer(){
-    while true
-    do
-        echo -e '\E[96m'"\033\ Do you want to enable slack notifications ? (Yes or No): \033[0m \c"
-        read  SlackEnable
-        case $SlackEnable in
-        Yes|yes|YES|YeS|yeS|yEs) break ;;
-        No|no|NO|nO) break ;;
-        *) echo -e '\E[91m'"\033\ Please type Yes or No \033[0m"
-        esac
-    done
-    if [[ "$SlackEnable" =~ $yesPattern ]]; then
-        echo -e ""
-        echo -e '\E[96m'"\033\- Slack settings. \033[0m"
-        echo -e '\E[1m'"\033\This section, deploys slack notification script that placed at \033[0m"
-        echo -e '\E[1m'"\033\https://github.com/ericoc/zabbix-slack-alertscript \033[0m"
-        echo -e '\E[1m'"\033\Also curl and curl-dev pkgs will be installed on the zabbix server container. \033[0m"
-
-        echo -e '\E[1m'"\033\An incoming web-hook integration must be created within your Slack.com account \033[0m"
-        echo -e '\E[1m'"\033\which can be done at https://my.slack.com/services/new/incoming-webhook \033[0m"
-        echo -e '\E[1m'"\033\Please create the webhook now and provide it.\033[0m"
-        echo ""
-        sleep 1
-
-        # Get slack webhook URL
-        echo -e '\E[96m'"\033\ Enter your slack webhook uri: \033[0m \c"
-        read SlackWebHook
-        while [[ -z $SlackWebHook ]]
-        do
-          echo -e '\E[91m'"\033\ Please enter your webhook uri:\033[0m \c"
-          read SlackWebHook
-        done
-
-        # Get slack channel name to send notifications
-        echo -e '\E[96m'"\033\ Enter your slack channel: \033[0m \c"
-        read SlackChannel
-        while [[ -z $SlackChannel ]]
-        do
-          echo -e '\E[91m'"\033\ Please enter your channel:\033[0m \c"
-          read SlackChannel
-        done
-        SlackChannel="#$SlackChannel"
-    else
-        echo -n "Slack notification configuration:" && \
-        echo -ne "\t\t" && Skip
-        sleep 1
-    fi
-}
-
-function CreateSlackMediaTypePD () {
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "mediatype.create",
-    "params": {
-        "description": "Slack",
-        "type": 1,
-        "exec_path": "slack.sh",
-        "exec_params": "{ALERT.SENDTO}\n{ALERT.SUBJECT}\n{ALERT.MESSAGE}\n"
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-}
-
-function AddSlackMediatoAdminPD() {
-if [[ "$SMTPEnable" =~ $yesPattern ]]; then
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "user.update",
-    "params": {
-        "userid": "1",
-        "user_medias": [
-            {
-                "mediatypeid": "1",
-                "sendto": "$SentTo",
-                "active": 0,
-                "severity": 63,
-                "period": "1-7,00:00-24:00"
-            },
-            {
-                "mediatypeid": "4",
-                "sendto": "$SlackChannel",
-                "active": 0,
-                "severity": 63,
-                "period": "1-7,00:00-24:00"
-            }
-        ]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-else
-cat <<EOF
-{
-    "jsonrpc": "2.0",
-    "method": "user.update",
-    "params": {
-        "userid": "1",
-        "user_medias": [
-            {
-                "mediatypeid": "4",
-                "sendto": "$SlackChannel",
-                "active": 0,
-                "severity": 63,
-                "period": "1-7,00:00-24:00"
-            }
-        ]
-    },
-    "auth": "$ZBX_AUTH_TOKEN",
-    "id": 0
-}
-EOF
-fi
-}
-
 # API related
-function GetAPIUserGroupIDPD () {
+function GetAPIUserGroupIDPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1013,7 +1009,7 @@ EOF
 }
 
 # Add user group for zabbix api user
-function CreateAPIUserGroupPD () {
+function CreateAPIUserGroupPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1159,7 +1155,7 @@ cat <<EOF
 EOF
 }
 
-function CreateAPIUserPD () {
+function CreateAPIUserPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1180,7 +1176,7 @@ EOF
 }
 
 # Zabbix server Host ID
-function GetHostIDPD () {
+function GetHostIDPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1194,8 +1190,7 @@ cat <<EOF
 EOF
 }
 
-
-function UpdateHostInterfacePD () {
+function UpdateHostInterfacePD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1215,7 +1210,7 @@ cat <<EOF
 EOF
 }
 
-function EnableZbxAgentonServerPD () {
+function EnableZbxAgentonServerPD() {
 cat <<EOF
 {
     "jsonrpc": "2.0",
@@ -1232,7 +1227,8 @@ cat <<EOF
 EOF
 }
 
-function CreateGRFAPIKey () {
+### Grafana related
+function CreateGRFAPIKey() {
     GRF_API_KEY=$(curl --insecure -s \
     -H "Accept: application/json" \
     -H "Content-Type:application/json" \
@@ -1244,7 +1240,7 @@ function CreateGRFAPIKey () {
      $GRF_SERVER_URL/api/auth/keys |jq .key |tr -d '"')
 }
 
-function CreateZbxDataSourcePD () {
+function CreateZbxDataSourcePD() {
 cat <<EOF
 {
         "orgId": 1,
@@ -1252,7 +1248,7 @@ cat <<EOF
         "type": "alexanderzobnin-zabbix-datasource",
         "typeLogoUrl": "public/plugins/alexanderzobnin-zabbix-datasource/img/zabbix_app_logo.svg",
         "access": "proxy",
-        "url": "https://zabbix-web-nginx-mysql:443/api_jsonrpc.php",
+        "url": "https://zabbix-web-nginx-mysql:8443/api_jsonrpc.php",
         "password": "zabbix",
         "user": "apiuser",
         "database": "",
@@ -1265,7 +1261,8 @@ cat <<EOF
             "keepCookies": [],
             "password": "zabbix",
             "tlsSkipVerify": true,
-            "username": "apiuser"
+            "username": "apiuser",
+            "cacheTTL": "5m"
         },
         "readOnly": false
 }

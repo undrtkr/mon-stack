@@ -10,7 +10,7 @@ case "$1" in
         ########## ZABBIX DEPLOYMENT ##########
         echo ""
         echo -e '\E[1m'"\033\DOCKERIZED ZABBIX DEPLOYMENT AND CONFIGURATION SCRIPT \033[0m"
-        echo -e '\E[1m'"\033\Version: 1.0.0"
+        echo -e '\E[1m'"\033\Version: 2.0.0"
         echo ""
         echo -e '\E[1m'"\033\By this script, the steps listed below will be done: \033[0m"
         echo ""
@@ -155,25 +155,29 @@ case "$1" in
         # Check if zabbix-server is already up
         CheckZabbix
         if [[ "$status" == "Not deployed" ]]; then
-           echo -e ""
-           echo -e '\E[96m'"\033\- Dockerized zabbix server deployment. \033[0m"
-           sleep 1
-           EchoDash
-           docker-compose up -d
-           # Wait until zabbix getting up
-           GetZabbixAuthToken
-           echo -e '\E[1m'"\033\- Waiting for Zabbix server getting ready... \033[0m"
-           while [ "$ZBX_AUTH_TOKEN" == "null" ] || [ -z "$ZBX_AUTH_TOKEN" ]
-           do
-            sleep 2
-            GetZabbixAuthToken
-            echo -e '\E[1m'"\033\- Waiting for Zabbix server getting ready... \033[0m"
-           done
-           echo ""
-           echo -n "Zabbix deployment:" && \
-           echo -ne "\t\t\t\t" && Done
-           sleep 1
-           EchoDash
+            echo -e ""
+            echo -e '\E[96m'"\033\- Dockerized zabbix server deployment. \033[0m"
+            sleep 1
+            EchoDash
+            docker-compose up -d
+
+            # Wait until zabbix getting up
+            for (( i=0; i<23; ++i)); do
+                GetZabbixAuthToken
+                [[ "$ZBX_AUTH_TOKEN" != "null" ]] && [[ -n "$ZBX_AUTH_TOKEN" ]] && break
+                echo -e '\E[1m'"\033\- Waiting for 5 seconds to zabbix server getting be ready... ( $(expr $(echo 23) - $i) retries left ) \033[0m"
+                sleep 5
+            done
+            if [[ "$ZBX_AUTH_TOKEN" == "null" ]] || [[ -z "$ZBX_AUTH_TOKEN" ]]; then
+                echo -e "\e[91m- [ERROR]: Zabbix server still not ready after 2 minutes. Please check zabbix server container.\e[0m"
+                exit 1
+            fi
+
+            echo ""
+            echo -n "Zabbix deployment:" && \
+            echo -ne "\t\t\t\t" && Done
+            sleep 1
+            EchoDash
         else
             echo -e ""
             echo -e '\E[91m'"\033\WARNING:\033[0m"
@@ -269,81 +273,9 @@ case "$1" in
 
 
         ########## TEMPLATE CONFIGURATIONS ##########
-        # This will add new time
         echo -e ""
         echo -e '\E[96m'"\033\- Tune Linux OS Template.\033[0m"
         sleep 1
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(DiskUsedPercentLinuxPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Disk usage in % item prototype is already exists"
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Create an item prototype for disk usage in %:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create itemprototype for disk usage in %:" && \
-            echo -ne "\t\t" && Done
-            sleep 1
-        fi
-
-        CreateLinuxCPULoadAllCoreItems
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(AvailMemoryPercentLinuxItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Available memory in % is already exists."
-                echo -ne "\t\t" && Skip
-            else
-                echo ""
-                echo -n "Create available memory in % item for Linux:"
-                echo -ne "\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create available memory in % item for Linux:"
-            echo -ne "\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(NumOfCPULinuxItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "CPU count item for Linux is already exists."
-                echo -ne "\t" && Skip
-            else
-                echo ""
-                echo -n "Create CPU count item for Linux:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create CPU count item for Linux:" && \
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
 
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
@@ -356,17 +288,43 @@ case "$1" in
                 echo -ne "\t\t" && Skip
             else
                 echo ""
-                echo -n "Set filesystem discovery LLD interval to 5m:"
+                echo -n "Set filesystem discovery LLD interval to 30m:"
                 echo -ne "\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set filesystem discovery LLD interval to 5m:" && \
+            echo -n "Set filesystem discovery LLD interval to 30m:" && \
             echo -ne "\t\t" && Done
             sleep 1
         fi
+
+        sleep 1
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(FreeDiskSpacePercentLinuxPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Skip
+            else
+                echo ""
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create an item protoype to get free disk space as percentage for all partitions:" && \
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+
         sleep 1
 
         POST=$(curl -s --insecure \
@@ -376,10 +334,10 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 5m."
+                echo -n "LLD rule is already set to 30m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set netif discovery LLD interval to 5m:"
+                echo -n "Set netif discovery LLD interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
@@ -399,17 +357,17 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total memory check interval is already set to 10m."
+                echo -n "Total memory check interval is already set to 5m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total memory check interval to 10m:"
+                echo -n "Set total memory check interval to 5m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total memory check interval to 10m:"
+            echo -n "Set total memory check interval to 5m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -422,17 +380,39 @@ case "$1" in
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Total swap check interval is already set to 10m."
+                echo -n "Total swap check interval is already set to 30m."
                 echo -ne "\t\t\t\t" && Skip
             else
-                echo -n "Set total swap check interval to 10m:"
+                echo -n "Set total swap check interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Set total swap check interval to 10m:"
+            echo -n "Set total swap check interval to 30m:"
+            echo -ne "\t\t\t" && Done
+            sleep 1
+        fi
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(NumberofCpusIntervalPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "Number of CPUs interval is already set to 5m."
+                echo -ne "\t\t\t\t" && Skip
+            else
+                echo -n "Set Number of CPUs interval to 5m:"
+                echo -ne "\t\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Set Number of CPUs interval to 5m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -445,22 +425,70 @@ case "$1" in
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
         -H "Content-Type:application/json" \
-        -X POST --data "$(CreateNumOfCPUWinItemPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+        -X POST --data "$(FreeDiskSpacePercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "CPU count item for Windows is already exists."
-                echo -ne "\t" && Skip
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Skip
             else
                 echo ""
-                echo -n "Create CPU count item for Windows:"
+                echo -n "Create an item protoype to get free disk space as percentage for all partitions:"
+                echo -ne "\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Create an item protoype to get free disk space as percentage for all partitions:" && \
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+
+        sleep 1
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(LLDFSRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "LLD rule is already set to 30m."
+                echo -ne "\t\t" && Skip
+            else
+                echo ""
+                echo -n "Set filesystem discovery LLD interval to 30m:"
+                echo -ne "\t\t" && Failed
+                echo -n "An error occured. Please check the error output"
+                echo $POST |jq .
+                sleep 1
+            fi
+        else
+            echo -n "Set filesystem discovery LLD interval to 30m:" && \
+            echo -ne "\t\t" && Done
+            sleep 1
+        fi
+        sleep 1
+
+        POST=$(curl -s --insecure \
+        -H "Accept: application/json" \
+        -H "Content-Type:application/json" \
+        -X POST --data "$(LLDNetIfRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+
+        if [[ "$POST" == *"error"* ]]; then
+            if [[ "$POST" == *"already exists"* ]]; then
+                echo -n "LLD rule is already set to 30m."
+                echo -ne "\t\t\t\t" && Skip
+            else
+                echo -n "Set netif discovery LLD interval to 30m:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Create CPU count item for Windows:"
+            echo -n "Set netif discovery LLD interval to 30m:"
             echo -ne "\t\t\t" && Done
             sleep 1
         fi
@@ -468,23 +496,22 @@ case "$1" in
         POST=$(curl -s --insecure \
         -H "Accept: application/json" \
         -H "Content-Type:application/json" \
-        -X POST --data "$(CPUUtilWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+        -X POST --data "$(FreeMemPercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
 
         if [[ "$POST" == *"error"* ]]; then
             if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "CPU utilization item for Windows is already exists."
-                echo -ne "\t" && Skip
+                echo -n "Free mem in % item is already exist."
+                echo -ne "\t\t\t" && Skip
             else
-                echo ""
-                echo -n "Create CPU utilization item for Windows:"
+                echo -n "Create fee mem item as percentage:"
                 echo -ne "\t\t\t" && Failed
                 echo -n "An error occured. Please check the error output"
                 echo $POST |jq .
                 sleep 1
             fi
         else
-            echo -n "Create CPU utilization item for Windows:"
-            echo -ne "\t\t" && Done
+            echo -n "Create fee mem item as percentage:"
+            echo -ne "\t\t\t" && Done
             sleep 1
         fi
 
@@ -509,120 +536,6 @@ case "$1" in
             echo -n "Disable annoying Windows service items LLD rule:"
             echo -ne "\t" && Done
             sleep 1
-        fi
-
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(LLDFSRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 5m."
-                echo -ne "\t\t" && Skip
-            else
-                echo ""
-                echo -n "Set filesystem discovery LLD interval to 5m:"
-                echo -ne "\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Set filesystem discovery LLD interval to 5m:" && \
-            echo -ne "\t\t" && Done
-            sleep 1
-        fi
-        sleep 1
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(LLDNetIfRuleWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "LLD rule is already set to 5m."
-                echo -ne "\t\t\t\t" && Skip
-            else
-                echo -n "Set netif discovery LLD interval to 5m:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Set netif discovery LLD interval to 5m:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(FreeMemPercentWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Free mem in % item is already exist."
-                echo -ne "\t\t\t" && Skip
-            else
-                echo -n "Update fee mem item as percentage:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Update fee mem item as percentage:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(ExistingFreeMemTriggerWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Free mem trigger is already deleted"
-                echo -ne "\t\t\t" && Skip
-            else
-                echo -n "Delete existing trigger for free mem:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Delete existing trigger for free mem:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        fi
-
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type:application/json" \
-        -X POST --data "$(NewFreeMemTriggerWinPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-        if [[ "$POST" == *"error"* ]]; then
-            if [[ "$POST" == *"already exists"* ]]; then
-                echo -n "Free mem trigger is already exist"
-                echo -ne "\t\t\t" && Skip
-            else
-                echo -n "Create trigger for free mem in %:"
-                echo -ne "\t\t\t" && Failed
-                echo -n "An error occured. Please check the error output"
-                echo $POST |jq .
-                sleep 1
-            fi
-        else
-            echo -n "Create trigger for free mem in %:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-            EchoDash
         fi
 
         ########## ZABBIX API USER CONFIGURATIONS ##########
@@ -754,8 +667,19 @@ case "$1" in
         echo -e ""
         echo -e '\E[96m'"\033\- Grafana configurations.\033[0m"
         sleep 1
+        # Wait for grafana server to be ready
+        for (( i=0; i<23; ++i)); do
+            GRAFANA_HEALTH=$(curl -s --insecure https://localhost:3000/healthz)
+            [ "$GRAFANA_HEALTH" == "Ok" ] && break
+            echo -e '\E[1m'"\033\- Waiting for 5 seconds to grafana server getting be ready... ( $(expr $(echo 23) - $i) retries left ) \033[0m"
+            sleep 5
+        done
 
-        # Enable zabbix plugin
+        if [[ "$GRAFANA_HEALTH" != "Ok" ]]; then
+                echo -e "\e[91m- [ERROR]: Grafana server still not ready after 2 minutes. Please check grafana container.\e[0m"
+                exit 1
+        fi
+        # Enable zabbix datasource plugin
         POST=$(curl --insecure -s \
         -H "Content-Type:application/x-www-form-urlencoded" \
         -X POST $GRF_SERVER_URL/api/plugins/alexanderzobnin-zabbix-app/settings?enabled=true)
@@ -838,27 +762,6 @@ case "$1" in
         else
             echo -n "Delete default zabbix dashboard:"
             echo -ne "\t\t" && Done
-            sleep 1
-        fi
-
-        # Import zabbix server dashboard
-        POST=$(curl -s --insecure \
-        -H "Accept: application/json" \
-        -H "Content-Type: application/json;charset=UTF-8" \
-        -H "Authorization:Bearer $GRF_API_KEY" \
-        -d "@../grafana_dashboards/zabbix_server_dashboard.json" \
-        -X POST "$GRF_SERVER_URL/api/dashboards/db" |jq .)
-
-        if [[ "$POST" == *"success"* ]]; then
-            echo -n "Import zabbix server dashboard:"
-            echo -ne "\t\t\t" && Done
-            sleep 1
-        else
-            echo ""
-            echo -n "Import zabbix server dashboard:"
-            echo -ne "\t\t" && Failed
-            echo -n "An error occured. Please check the error output"
-            echo $POST |jq .
             sleep 1
         fi
 
@@ -956,7 +859,7 @@ case "$1" in
             POST=$(curl -s --insecure \
             -H "Accept: application/json" \
             -H "Content-Type:application/json" \
-            -X POST --data "$(AdminEmailPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+            -X POST --data "$(AdminSmtpMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
 
             if [[ "$POST" == *"error"* ]]; then
                 echo -n "Set admin's email address:"
@@ -992,96 +895,165 @@ case "$1" in
         ########## SLACK CONFIGURATION ##########
         echo ""
         GetSlackNotifAnswer
-
         if [[ "$SlackEnable" =~ $yesPattern ]]; then
-            # Install curl and curl-dev on zabbix-server
-            CheckZabbix
-            if [[ "$status" == *" Up "* ]]; then
-                docker-compose exec zabbix-server apk --no-cache add curl curl-dev > /dev/null 2>&1
-                echo -n "Slack dependency installation:"
-                echo -ne "\t\t\t" && Done
-            else
-                echo -n "Zabbix is not running. Quit!"
-                EchoDash
-                exit 1
-            fi
 
-            # Set slack webhook URL
-            sed -i '/^url\=/d' $BASEDIR/../zbx_env/usr/lib/zabbix/alertscripts/slack.sh  &&
-            sed -i "/^# Slack incoming web-hook URL/a url='"$SlackWebHook"'" $BASEDIR/../zbx_env/usr/lib/zabbix/alertscripts/slack.sh
-
-            # Create media type for slack
             GetZabbixAuthToken
             POST=$(curl -s --insecure \
             -H "Accept: application/json" \
             -H "Content-Type:application/json" \
-            -X POST --data "$(CreateSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+            -X POST --data "$(ZabbixUrlGlobalMacroPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
 
-            if [[ "$POST" == *"error"* ]]; then
-                if [[ "$POST" == *"already exists"* ]]; then
-                    echo -n "Slack mediatype is already exist."
-                    echo -ne "\t\t\t" && Skip
-                else
-                    echo -n "Create slack mediatype:"
-                    echo -ne "\t\t\t" && Failed
-                    echo -n "An error occured. Please check the error output"
-                    echo $POST |jq .
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Done
                     sleep 1
                 fi
-            else
-                echo -n "Create slack mediatype :"
-                echo -ne "\t\t\t" && Done
-                sleep 1
-            fi
 
-            # Assign slack mediatype to admin user
             POST=$(curl -s --insecure \
             -H "Accept: application/json" \
             -H "Content-Type:application/json" \
-            -X POST --data "$(AddSlackMediatoAdminPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
+            -X POST --data "$(SetSlackBotTokenPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
 
             if [[ "$POST" == *"error"* ]]; then
-                if [[ "$POST" == *"already exists"* ]]; then
-                    echo -n "Slack mediatype is already enabled for Admin."
-                    echo -ne "\t\t\t" && Skip
-                else
-                    echo -n "Assign slack mediatype to Admin user:"
-                    echo -ne "\t\t\t" && Failed
-                    echo -n "An error occured. Please check the error output"
-                    echo $POST |jq .
-                    sleep 1
-                fi
-            else
-                echo -n "Assign slack mediatype to Admin user:"
-                echo -ne "\t\t" && Done
-                sleep 1
-            fi
-
-        else
-                echo -n "Slack notification configuration:" && \
-                echo -ne "\t\t" && Skip
-        fi
-            POST=$(curl -s --insecure \
-            -H "Accept: application/json" \
-            -H "Content-Type:application/json" \
-            -X POST --data "$(NotifTriggerPD)" "$ZBX_SERVER_URL/api_jsonrpc.php"  |jq .)
-
-            if [[ "$POST" == *"error"* ]]; then
-                echo -n "Enable notifications for admin group:"
-                echo -ne "\t" && Failed
-                echo -n "An error occured. Please check the error output"
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Failed
+                echo "An error occured. Please check the error output"
                 echo "$POST" |jq .
                 sleep 1
                 else
-                echo -n "Enable notifications for admin group:"
+                echo -n "Adding bot token to slack medita type:"
                 echo -ne "\t\t" && Done
                 sleep 1
-                EchoDash
             fi
+
+            if [[ "$SMTPEnable" =~ $yesPattern ]]; then
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSmtpSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Done
+                    FinisMessage
+                    sleep 1
+                fi
+            else
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Done
+                    FinisMessage
+                    sleep 1
+                fi
+            fi
+        else
+            FinisMessage
+            exit 0
+        fi
+    ;;
+
+    enable-slack)
+        ########## SLACK CONFIGURATION ##########
         echo ""
-        sleep 1
-        echo -e '\E[1m'"\033\Zabbix deployment finished!\033[0m"
-        sleep 1
+        GetSlackNotifAnswer
+        if [[ "$SlackEnable" =~ $yesPattern ]]; then
+
+            GetZabbixAuthToken
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(ZabbixUrlGlobalMacroPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Creating a global macro for Zabbix URL:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+
+            POST=$(curl -s --insecure \
+            -H "Accept: application/json" \
+            -H "Content-Type:application/json" \
+            -X POST --data "$(SetSlackBotTokenPD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+            if [[ "$POST" == *"error"* ]]; then
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Failed
+                echo "An error occured. Please check the error output"
+                echo "$POST" |jq .
+                sleep 1
+                else
+                echo -n "Adding bot token to slack medita type:"
+                echo -ne "\t\t" && Done
+                sleep 1
+            fi
+
+            if [[ "$SMTPEnable" =~ $yesPattern ]]; then
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSmtpSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack and smtp media types to admin user:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+            else
+                POST=$(curl -s --insecure \
+                -H "Accept: application/json" \
+                -H "Content-Type:application/json" \
+                -X POST --data "$(AdminSlackMediaTypePD)" "$ZBX_SERVER_URL/api_jsonrpc.php" |jq .)
+
+                if [[ "$POST" == *"error"* ]]; then
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Failed
+                    echo "An error occured. Please check the error output"
+                    echo "$POST" |jq .
+                    sleep 1
+                    else
+                    echo -n "Adding slack media type to admin user:"
+                    echo -ne "\t\t" && Done
+                    sleep 1
+                fi
+            fi
+        else
+            exit 0
+        fi
     ;;
 
     *)
