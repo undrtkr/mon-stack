@@ -781,7 +781,7 @@ cat <<EOF
         "parameters": [
                 {
                     "name": "zabbix_url",
-                    "value": "https://ZBX_PUBLIC_IP:8443"
+                    "value": "https://$ZBX_PUBLIC_IP:8443"
                 },
                 {
                     "name": "bot_token",
@@ -972,7 +972,7 @@ cat <<EOF
 EOF
 }
 
-# notification trigger action for administrators
+# Notification trigger action for administrators
 function NotifTriggerPD() {
 cat <<EOF
 {
@@ -980,11 +980,7 @@ cat <<EOF
     "method": "action.update",
     "params": {
         "actionid": 3,
-        "status": 0,
-        "def_shortdata": "PROBLEM: {TRIGGER.NAME}",
-        "def_longdata": "\n\nStarted: {EVENT.TIME} - {EVENT.DATE} \nHost: {HOST.NAME} - {HOST.IP1} \nLatest Value: {ITEM.LASTVALUE1} \nSeverity: {TRIGGER.SEVERITY} \n\nEvent Details: https://$ZBX_PUBLIC_IP:8443/tr_events.php?triggerid={TRIGGER.ID}&eventid={EVENT.ID} \nAcknowledge: https://$ZBX_PUBLIC_IP:8443/zabbix.php?action=acknowledge.edit&eventids[]={EVENT.ID}",
-        "r_shortdata": "RESOLVED: {TRIGGER.NAME}",
-        "r_longdata": "\n\nResolved: {EVENT.RECOVERY.TIME} - {EVENT.RECOVERY.DATE} \nHost: {HOST.NAME} - {HOST.IP1} \nLatest Value: {ITEM.LASTVALUE1} \nProblem Duration: {EVENT.AGE} \nSeverity: {TRIGGER.SEVERITY} \n\nEvent Details: https://$ZBX_PUBLIC_IP:8443/tr_events.php?triggerid={TRIGGER.ID}&eventid={EVENT.ID}"
+        "status": 0
     },
     "auth": "$ZBX_AUTH_TOKEN",
     "id": 0
