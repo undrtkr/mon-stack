@@ -1,1238 +1,1144 @@
 {
-   "dashboard":{
-      "annotations":{
-         "list":[
+   "dashboard": {
+      "annotations": {
+         "list": [
             {
-               "builtIn":1,
-               "datasource":"-- Grafana --",
-               "enable":true,
-               "hide":true,
-               "iconColor":"rgba(0, 211, 255, 1)",
-               "name":"Annotations & Alerts",
-               "type":"dashboard"
+               "builtIn": 1,
+               "datasource": "-- Grafana --",
+               "enable": true,
+               "hide": true,
+               "iconColor": "rgba(0, 211, 255, 1)",
+               "name": "Annotations & Alerts",
+               "type": "dashboard"
             }
          ]
       },
-      "editable":true,
-      "gnetId":null,
-      "graphTooltip":0,
-      "id":3,
-      "iteration":1602966867323,
-      "links":[
-
-      ],
-      "panels":[
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 3,
+      "iteration": 1602966867323,
+      "links": [],
+      "panels": [
          {
-            "collapsed":false,
-            "datasource":null,
-            "gridPos":{
-               "h":1,
-               "w":24,
-               "x":0,
-               "y":0
+            "collapsed": true,
+            "datasource": null,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 0
             },
-            "id":22,
-            "panels":[
-
-            ],
-            "title":"Insight",
-            "type":"row"
+            "id": 22,
+            "panels": [],
+            "title": "Insight",
+            "type": "row"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":1,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 1,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"blue",
-                           "value":null
+                           "color": "blue",
+                           "value": null
                         }
                      ]
                   },
-                  "unit":"dtdhms"
+                  "unit": "dtdhms"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":3,
-               "w":6,
-               "x":0,
-               "y":1
+            "gridPos": {
+               "h": 3,
+               "w": 6,
+               "x": 0,
+               "y": 1
             },
-            "id":83,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 83,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Uptime"
+                  "item": {
+                     "filter": "System uptime"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Uptime",
-            "type":"stat"
+            "title": "Uptime",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"blue",
-                           "value":null
+                           "color": "blue",
+                           "value": null
                         }
                      ]
                   },
-                  "unit":"short"
+                  "unit": "short"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":3,
-               "w":6,
-               "x":6,
-               "y":1
+            "gridPos": {
+               "h": 3,
+               "w": 6,
+               "x": 6,
+               "y": 1
             },
-            "id":32,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 32,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":"CPU"
+                  "application": {
+                     "filter": "CPU"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Number of cores"
+                  "item": {
+                     "filter": "Number of cores"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Number of cores",
-            "type":"stat"
+            "title": "Number of cores",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":1,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 1,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"blue",
-                           "value":null
+                           "color": "blue",
+                           "value": null
                         }
                      ]
                   },
-                  "unit":"decbytes"
+                  "unit": "decbytes"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":3,
-               "w":6,
-               "x":12,
-               "y":1
+            "gridPos": {
+               "h": 3,
+               "w": 6,
+               "x": 12,
+               "y": 1
             },
-            "id":34,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 34,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":"Memory"
+                  "application": {
+                     "filter": "Memory"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Total memory"
+                  "item": {
+                     "filter": "Total memory"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Total Memory",
-            "type":"stat"
+            "title": "Total Memory",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":1,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 1,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"blue",
-                           "value":null
+                           "color": "blue",
+                           "value": null
                         }
                      ]
                   },
-                  "unit":"decbytes"
+                  "unit": "decbytes"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":3,
-               "w":6,
-               "x":18,
-               "y":1
+            "gridPos": {
+               "h": 3,
+               "w": 6,
+               "x": 18,
+               "y": 1
             },
-            "id":84,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 84,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"/.*:: Total space/"
+                  "item": {
+                     "filter": "/.*:: Total space/"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Total Storage",
-            "type":"stat"
+            "title": "Total Storage",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"percentage",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "percentage",
+                     "steps": [
                         {
-                           "color":"green",
-                           "value":null
+                           "color": "green",
+                           "value": null
                         },
                         {
-                           "color":"orange",
-                           "value":70
+                           "color": "orange",
+                           "value": 70
                         },
                         {
-                           "color":"red",
-                           "value":90
+                           "color": "red",
+                           "value": 90
                         }
                      ]
                   },
-                  "unit":"percent"
+                  "unit": "percent"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":4,
-               "w":4,
-               "x":0,
-               "y":4
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 4
             },
-            "id":25,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 25,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":"CPU"
+                  "application": {
+                     "filter": "CPU"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"CPU utilization"
+                  "item": {
+                     "filter": "CPU utilization"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Cpu Utilization",
-            "type":"stat"
+            "title": "Cpu Utilization",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"percentage",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "percentage",
+                     "steps": [
                         {
-                           "color":"green",
-                           "value":null
+                           "color": "green",
+                           "value": null
                         },
                         {
-                           "color":"orange",
-                           "value":70
+                           "color": "orange",
+                           "value": 70
                         },
                         {
-                           "color":"red",
-                           "value":90
+                           "color": "red",
+                           "value": 90
                         }
                      ]
                   },
-                  "unit":"percent"
+                  "unit": "percent"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":4,
-               "w":4,
-               "x":4,
-               "y":4
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 4
             },
-            "id":87,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 87,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":"Memory"
+                  "application": {
+                     "filter": "Memory"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Memory utilization"
+                  "item": {
+                     "filter": "Memory utilization"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Memory Utilization",
-            "type":"stat"
+            "title": "Memory Utilization",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"percentage",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "percentage",
+                     "steps": [
                         {
-                           "color":"red",
-                           "value":null
+                           "color": "red",
+                           "value": null
                         },
                         {
-                           "color":"yellow",
-                           "value":10
+                           "color": "yellow",
+                           "value": 10
                         },
                         {
-                           "color":"green",
-                           "value":20
+                           "color": "green",
+                           "value": 20
                         }
                      ]
                   },
-                  "unit":"percent"
+                  "unit": "percent"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":4,
-               "w":4,
-               "x":8,
-               "y":4
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 8,
+               "y": 4
             },
-            "id":88,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 88,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":"Filesystems"
+                  "application": {
+                     "filter": "Filesystems"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"C:: Free space in %"
+                  "item": {
+                     "filter": "C:: Free space in %"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Free Disk Space on C",
-            "type":"stat"
+            "title": "Free Disk Space on C",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"green",
-                           "value":null
+                           "color": "green",
+                           "value": null
                         },
                         {
-                           "color":"yellow",
-                           "value":10
+                           "color": "yellow",
+                           "value": 10
                         },
                         {
-                           "color":"red",
-                           "value":20
+                           "color": "red",
+                           "value": 20
                         }
                      ]
                   },
-                  "unit":"none"
+                  "unit": "none"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":4,
-               "w":4,
-               "x":12,
-               "y":4
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 12,
+               "y": 4
             },
-            "id":89,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 89,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"0 C:: Disk average queue size (avgqu-sz)"
+                  "item": {
+                     "filter": "0 C:: Disk average queue size (avgqu-sz)"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Disk average queue size on C",
-            "type":"stat"
+            "title": "Disk average queue size on C",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"green",
-                           "value":null
+                           "color": "green",
+                           "value": null
                         },
                         {
-                           "color":"orange",
-                           "value":399
+                           "color": "orange",
+                           "value": 399
                         },
                         {
-                           "color":"red",
-                           "value":499
+                           "color": "red",
+                           "value": 499
                         }
                      ]
                   },
-                  "unit":"none"
+                  "unit": "none"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":4,
-               "w":4,
-               "x":16,
-               "y":4
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 16,
+               "y": 4
             },
-            "id":86,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 86,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Number of processes"
+                  "item": {
+                     "filter": "Number of processes"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Number of processes",
-            "type":"stat"
+            "title": "Number of processes",
+            "type": "stat"
          },
          {
-            "cacheTimeout":null,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  },
-                  "decimals":0,
-                  "mappings":[
+            "cacheTimeout": null,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {},
+                  "decimals": 0,
+                  "mappings": [
                      {
-                        "id":0,
-                        "op":"=",
-                        "text":"N/A",
-                        "type":1,
-                        "value":"null"
+                        "id": 0,
+                        "op": "=",
+                        "text": "N/A",
+                        "type": 1,
+                        "value": "null"
                      }
                   ],
-                  "nullValueMode":"connected",
-                  "thresholds":{
-                     "mode":"absolute",
-                     "steps":[
+                  "nullValueMode": "connected",
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
                         {
-                           "color":"green",
-                           "value":null
+                           "color": "green",
+                           "value": null
                         },
                         {
-                           "color":"orange",
-                           "value":799
+                           "color": "orange",
+                           "value": 799
                         },
                         {
-                           "color":"red",
-                           "value":899
+                           "color": "red",
+                           "value": 899
                         }
                      ]
                   },
-                  "unit":"none"
+                  "unit": "none"
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "gridPos":{
-               "h":4,
-               "w":4,
-               "x":20,
-               "y":4
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 20,
+               "y": 4
             },
-            "id":82,
-            "interval":null,
-            "links":[
-
-            ],
-            "maxDataPoints":100,
-            "options":{
-               "colorMode":"background",
-               "graphMode":"area",
-               "justifyMode":"auto",
-               "orientation":"horizontal",
-               "reduceOptions":{
-                  "calcs":[
+            "id": 82,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
                      "lastNotNull"
                   ],
-                  "fields":"",
-                  "values":false
+                  "fields": "",
+                  "values": false
                },
-               "textMode":"auto"
+               "textMode": "auto"
             },
-            "pluginVersion":"7.2.1",
-            "targets":[
+            "pluginVersion": "7.2.1",
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Number of threads"
+                  "item": {
+                     "filter": "Number of threads"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Number of threads",
-            "type":"stat"
+            "title": "Number of threads",
+            "type": "stat"
          },
          {
-            "ackEventColor":"rgb(56, 219, 156)",
-            "ackField":true,
-            "ageField":true,
-            "customLastChangeFormat":false,
-            "datasource":"zabbix",
-            "descriptionAtNewLine":false,
-            "descriptionField":true,
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  }
+            "ackEventColor": "rgb(56, 219, 156)",
+            "ackField": true,
+            "ageField": true,
+            "customLastChangeFormat": false,
+            "datasource": "zabbix",
+            "descriptionAtNewLine": false,
+            "descriptionField": true,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {}
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "fontSize":"100%",
-            "gridPos":{
-               "h":6,
-               "w":24,
-               "x":0,
-               "y":8
+            "fontSize": "100%",
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 8
             },
-            "highlightBackground":false,
-            "highlightNewEvents":false,
-            "highlightNewerThan":"1h",
-            "hostField":true,
-            "hostGroups":false,
-            "hostProxy":false,
-            "hostTechNameField":false,
-            "id":81,
-            "lastChangeFormat":"",
-            "layout":"table",
-            "limit":100,
-            "links":[
-
-            ],
-            "markAckEvents":false,
-            "okEventColor":"rgb(56, 189, 113)",
-            "pageSize":10,
-            "problemTimeline":true,
-            "repeat":null,
-            "resizedColumns":[
-
-            ],
-            "schemaVersion":8,
-            "severityField":true,
-            "showTags":false,
-            "sortProblems":"lastchange",
-            "statusField":true,
-            "statusIcon":false,
-            "targets":[
+            "highlightBackground": false,
+            "highlightNewEvents": false,
+            "highlightNewerThan": "1h",
+            "hostField": true,
+            "hostGroups": false,
+            "hostProxy": false,
+            "hostTechNameField": false,
+            "id": 81,
+            "lastChangeFormat": "",
+            "layout": "table",
+            "limit": 100,
+            "links": [],
+            "markAckEvents": false,
+            "okEventColor": "rgb(56, 189, 113)",
+            "pageSize": 10,
+            "problemTimeline": true,
+            "repeat": null,
+            "resizedColumns": [],
+            "schemaVersion": 8,
+            "severityField": true,
+            "showTags": false,
+            "sortProblems": "lastchange",
+            "statusField": true,
+            "statusIcon": false,
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":""
+                  "item": {
+                     "filter": ""
                   },
-                  "options":{
-                     "acknowledged":2,
-                     "hostProxy":false,
-                     "hostsInMaintenance":false,
-                     "limit":1001,
-                     "minSeverity":0,
-                     "severities":[
+                  "options": {
+                     "acknowledged": 2,
+                     "hostProxy": false,
+                     "hostsInMaintenance": false,
+                     "limit": 1001,
+                     "minSeverity": 0,
+                     "severities": [
                         0,
                         1,
                         2,
@@ -1240,994 +1146,906 @@
                         4,
                         5
                      ],
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false,
-                     "sortProblems":"default"
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false,
+                     "sortProblems": "default"
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":5,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "showProblems":"recent",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 5,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "showProblems": "recent",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "title":"Host Specific Alerts List",
-            "triggerSeverity":[
+            "title": "Host Specific Alerts List",
+            "triggerSeverity": [
                {
-                  "color":"rgb(108, 108, 108)",
-                  "priority":0,
-                  "severity":"Not classified",
-                  "show":true
+                  "color": "rgb(108, 108, 108)",
+                  "priority": 0,
+                  "severity": "Not classified",
+                  "show": true
                },
                {
-                  "color":"rgb(120, 158, 183)",
-                  "priority":1,
-                  "severity":"Information",
-                  "show":true
+                  "color": "rgb(120, 158, 183)",
+                  "priority": 1,
+                  "severity": "Information",
+                  "show": true
                },
                {
-                  "color":"rgb(175, 180, 36)",
-                  "priority":2,
-                  "severity":"Warning",
-                  "show":true
+                  "color": "rgb(175, 180, 36)",
+                  "priority": 2,
+                  "severity": "Warning",
+                  "show": true
                },
                {
-                  "color":"rgb(255, 137, 30)",
-                  "priority":3,
-                  "severity":"Average",
-                  "show":true
+                  "color": "rgb(255, 137, 30)",
+                  "priority": 3,
+                  "severity": "Average",
+                  "show": true
                },
                {
-                  "color":"rgb(255, 101, 72)",
-                  "priority":4,
-                  "severity":"High",
-                  "show":true
+                  "color": "rgb(255, 101, 72)",
+                  "priority": 4,
+                  "severity": "High",
+                  "show": true
                },
                {
-                  "color":"rgb(215, 0, 0)",
-                  "priority":5,
-                  "severity":"Disaster",
-                  "show":true
+                  "color": "rgb(215, 0, 0)",
+                  "priority": 5,
+                  "severity": "Disaster",
+                  "show": true
                }
             ],
-            "type":"alexanderzobnin-zabbix-triggers-panel"
+            "type": "alexanderzobnin-zabbix-triggers-panel"
          },
          {
-            "collapsed":false,
-            "datasource":null,
-            "gridPos":{
-               "h":1,
-               "w":24,
-               "x":0,
-               "y":13
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 13
             },
-            "id":4,
-            "panels":[
-
-            ],
-            "repeat":null,
-            "title":"CPU & Memory Histograms",
-            "type":"row"
+            "id": 4,
+            "panels": [],
+            "repeat": null,
+            "title": "CPU & Memory Histograms",
+            "type": "row"
          },
          {
-            "aliasColors":{
-               "CPU iowait time":"#B7DBAB",
-               "CPU system time":"#BF1B00",
-               "CPU user time":"#EAB839"
+            "aliasColors": {
+               "CPU iowait time": "#B7DBAB",
+               "CPU system time": "#BF1B00",
+               "CPU user time": "#EAB839"
             },
-            "bars":false,
-            "dashLength":10,
-            "dashes":false,
-            "datasource":"zabbix",
-            "editable":true,
-            "error":false,
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  }
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "zabbix",
+            "editable": true,
+            "error": false,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {}
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "fill":3,
-            "fillGradient":0,
-            "grid":{
-
+            "fill": 3,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 14
             },
-            "gridPos":{
-               "h":8,
-               "w":12,
-               "x":0,
-               "y":14
+            "hiddenSeries": false,
+            "id": 1,
+            "legend": {
+              "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "max": true,
+               "min": true,
+               "show": true,
+               "sort": "current",
+               "sortDesc": true,
+               "total": false,
+               "values": true
             },
-            "hiddenSeries":false,
-            "id":1,
-            "legend":{
-               "avg":false,
-               "current":false,
-               "max":false,
-               "min":false,
-               "show":true,
-               "total":false,
-               "values":false
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+               "alertThreshold": true
             },
-            "lines":true,
-            "linewidth":1,
-            "links":[
-
-            ],
-            "nullPointMode":"connected",
-            "options":{
-               "alertThreshold":true
-            },
-            "percentage":false,
-            "pluginVersion":"7.2.1",
-            "pointradius":2,
-            "points":false,
-            "renderer":"flot",
-            "seriesOverrides":[
-
-            ],
-            "spaceLength":10,
-            "stack":false,
-            "steppedLine":false,
-            "targets":[
+            "percentage": false,
+            "pluginVersion": "7.2.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
                {
-                  "application":{
-                     "filter":"CPU"
+                  "application": {
+                     "filter": "CPU"
                   },
-                  "countTriggers":true,
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "countTriggers": true,
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "hide":false,
-                  "host":{
-                     "filter":"$host"
+                  "hide": false,
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"CPU utilization"
+                  "item": {
+                     "filter": "CPU utilization"
                   },
-                  "minSeverity":3,
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "minSeverity": 3,
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "thresholds":[
-
-            ],
-            "timeFrom":null,
-            "timeRegions":[
-
-            ],
-            "timeShift":null,
-            "title":"CPU Utilization",
-            "tooltip":{
-               "msResolution":false,
-               "shared":true,
-               "sort":0,
-               "value_type":"individual"
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "CPU Utilization",
+            "tooltip": {
+               "msResolution": false,
+               "shared": true,
+               "sort": 0,
+               "value_type": "individual"
             },
-            "type":"graph",
-            "xaxis":{
-               "buckets":null,
-               "mode":"time",
-               "name":null,
-               "show":true,
-               "values":[
-
-               ]
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": []
             },
-            "yaxes":[
+            "yaxes": [
                {
-                  "format":"percent",
-                  "logBase":1,
-                  "max":100,
-                  "min":0,
-                  "show":true
+                  "format": "percent",
+                  "logBase": 1,
+                  "max": 100,
+                  "min": 0,
+                  "show": true
                },
                {
-                  "format":"short",
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "short",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                }
             ],
-            "yaxis":{
-               "align":false,
-               "alignLevel":null
+            "yaxis": {
+               "align": false,
+               "alignLevel": null
             }
          },
          {
-            "aliasColors":{
-
-            },
-            "bars":false,
-            "dashLength":10,
-            "dashes":false,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  }
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {}
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "fill":1,
-            "fillGradient":0,
-            "gridPos":{
-               "h":8,
-               "w":12,
-               "x":12,
-               "y":14
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 14
             },
-            "hiddenSeries":false,
-            "id":11,
-            "legend":{
-               "alignAsTable":true,
-               "avg":true,
-               "current":true,
-               "max":true,
-               "min":true,
-               "show":true,
-               "total":false,
-               "values":true
+            "hiddenSeries": false,
+            "id": 11,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "max": true,
+               "min": true,
+               "show": true,
+               "sort": "current",
+               "sortDesc": true,
+               "total": false,
+               "values": true
             },
-            "lines":true,
-            "linewidth":1,
-            "links":[
-
-            ],
-            "nullPointMode":"null",
-            "options":{
-               "alertThreshold":true
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+               "alertThreshold": true
             },
-            "percentage":false,
-            "pluginVersion":"7.2.1",
-            "pointradius":5,
-            "points":false,
-            "renderer":"flot",
-            "seriesOverrides":[
-
-            ],
-            "spaceLength":10,
-            "stack":false,
-            "steppedLine":false,
-            "targets":[
+            "percentage": false,
+            "pluginVersion": "7.2.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
                {
-                  "application":{
-                     "filter":"Memory"
+                  "application": {
+                     "filter": "Memory"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"Free memory in %"
+                  "item": {
+                     "filter": "Free memory in %"
                   },
-                  "mode":0,
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "proxy": {
+                    "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
+                  },
+                  "tags": {
+                    "filter": ""
+                  },
+                  "trigger": {
+                    "filter": ""
+                  },
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "thresholds":[
-
-            ],
-            "timeFrom":null,
-            "timeRegions":[
-
-            ],
-            "timeShift":null,
-            "title":"Free Memory",
-            "tooltip":{
-               "shared":true,
-               "sort":0,
-               "value_type":"individual"
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Free Memory",
+            "tooltip": {
+               "shared": true,
+               "sort": 0,
+               "value_type": "individual"
             },
-            "type":"graph",
-            "xaxis":{
-               "buckets":null,
-               "mode":"time",
-               "name":null,
-               "show":true,
-               "values":[
-
-               ]
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": []
             },
-            "yaxes":[
+            "yaxes": [
                {
-                  "format":"percent",
-                  "label":null,
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                },
                {
-                  "format":"percent",
-                  "label":null,
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":false
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": false
                }
             ],
-            "yaxis":{
-               "align":false,
-               "alignLevel":null
+            "yaxis": {
+               "align": false,
+               "alignLevel": null
             }
          },
          {
-            "collapsed":false,
-            "datasource":null,
-            "gridPos":{
-               "h":1,
-               "w":24,
-               "x":0,
-               "y":22
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 22
             },
-            "id":16,
-            "panels":[
-
-            ],
-            "title":"Filesystem Histograms",
-            "type":"row"
+            "id": 16,
+            "panels": [],
+            "title": "Filesystem Histograms",
+            "type": "row"
          },
          {
-            "aliasColors":{
-
-            },
-            "bars":false,
-            "dashLength":10,
-            "dashes":false,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  }
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {}
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "fill":1,
-            "fillGradient":0,
-            "gridPos":{
-               "h":8,
-               "w":12,
-               "x":0,
-               "y":23
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 0,
+               "y": 23
             },
-            "hiddenSeries":false,
-            "id":18,
-            "legend":{
-               "alignAsTable":true,
-               "avg":true,
-               "current":true,
-               "max":true,
-               "min":true,
-               "show":true,
-               "total":false,
-               "values":true
+            "hiddenSeries": false,
+            "id": 18,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "max": true,
+               "min": true,
+               "show": true,
+               "sort": "current",
+               "sortDesc": true,
+               "total": false,
+               "values": true
             },
-            "lines":true,
-            "linewidth":1,
-            "links":[
-
-            ],
-            "nullPointMode":"null",
-            "options":{
-               "alertThreshold":true
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+               "alertThreshold": true
             },
-            "percentage":false,
-            "pluginVersion":"7.2.1",
-            "pointradius":5,
-            "points":false,
-            "renderer":"flot",
-            "seriesOverrides":[
-
-            ],
-            "spaceLength":10,
-            "stack":false,
-            "steppedLine":false,
-            "targets":[
+            "percentage": false,
+            "pluginVersion": "7.2.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
                {
-                  "application":{
-                     "filter":"Filesystems"
+                  "application": {
+                     "filter": "Filesystems"
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"/.*: Free space in %/"
+                  "item": {
+                     "filter": "/.*: Free space in %/"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "thresholds":[
-
-            ],
-            "timeFrom":null,
-            "timeRegions":[
-
-            ],
-            "timeShift":null,
-            "title":"Free disk spaces on all partitions",
-            "tooltip":{
-               "shared":true,
-               "sort":0,
-               "value_type":"individual"
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Free disk spaces on all partitions",
+            "tooltip": {
+               "shared": true,
+               "sort": 0,
+               "value_type": "individual"
             },
-            "type":"graph",
-            "xaxis":{
-               "buckets":null,
-               "mode":"time",
-               "name":null,
-               "show":true,
-               "values":[
-
-               ]
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": []
             },
-            "yaxes":[
+            "yaxes": [
                {
-                  "format":"percent",
-                  "label":null,
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                },
                {
-                  "format":"short",
-                  "label":null,
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                }
             ],
-            "yaxis":{
-               "align":false,
-               "alignLevel":null
+            "yaxis": {
+               "align": false,
+               "alignLevel": null
             }
          },
          {
-            "aliasColors":{
-
-            },
-            "bars":false,
-            "dashLength":10,
-            "dashes":false,
-            "datasource":"zabbix",
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  }
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "zabbix",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {}
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "fill":1,
-            "fillGradient":0,
-            "gridPos":{
-               "h":8,
-               "w":12,
-               "x":12,
-               "y":23
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+               "h": 8,
+               "w": 12,
+               "x": 12,
+               "y": 23
             },
-            "hiddenSeries":false,
-            "id":19,
-            "legend":{
-               "alignAsTable":true,
-               "avg":true,
-               "current":true,
-               "max":true,
-               "min":true,
-               "show":true,
-               "total":false,
-               "values":true
+            "hiddenSeries": false,
+            "id": 19,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "max": true,
+               "min": true,
+               "show": true,
+               "sort": "current",
+               "sortDesc": true,
+               "total": false,
+               "values": true
             },
-            "lines":true,
-            "linewidth":1,
-            "links":[
-
-            ],
-            "nullPointMode":"null",
-            "options":{
-               "alertThreshold":true
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "options": {
+               "alertThreshold": true
             },
-            "percentage":false,
-            "pluginVersion":"7.2.1",
-            "pointradius":5,
-            "points":false,
-            "renderer":"flot",
-            "seriesOverrides":[
-
-            ],
-            "spaceLength":10,
-            "stack":false,
-            "steppedLine":false,
-            "targets":[
+            "percentage": false,
+            "pluginVersion": "7.2.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"/.*Disk average queue size.*/"
+                  "item": {
+                     "filter": "/.*Disk average queue size.*/"
                   },
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "thresholds":[
-
-            ],
-            "timeFrom":null,
-            "timeRegions":[
-
-            ],
-            "timeShift":null,
-            "title":"Average disk queue size",
-            "tooltip":{
-               "shared":true,
-               "sort":0,
-               "value_type":"individual"
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Average disk queue size",
+            "tooltip": {
+               "shared": true,
+               "sort": 0,
+               "value_type": "individual"
             },
-            "type":"graph",
-            "xaxis":{
-               "buckets":null,
-               "mode":"time",
-               "name":null,
-               "show":true,
-               "values":[
-
-               ]
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": []
             },
-            "yaxes":[
+            "yaxes": [
                {
-                  "format":"percent",
-                  "label":null,
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                },
                {
-                  "format":"short",
-                  "label":null,
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                }
             ],
-            "yaxis":{
-               "align":false,
-               "alignLevel":null
+            "yaxis": {
+               "align": false,
+               "alignLevel": null
             }
          },
          {
-            "collapsed":false,
-            "datasource":null,
-            "gridPos":{
-               "h":1,
-               "w":24,
-               "x":0,
-               "y":31
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 31
             },
-            "id":5,
-            "panels":[
-
-            ],
-            "repeat":null,
-            "title":"Network Histograms",
-            "type":"row"
+            "id": 5,
+            "panels": [],
+            "repeat": null,
+            "title": "Network Histograms",
+            "type": "row"
          },
          {
-            "aliasColors":{
-
-            },
-            "bars":false,
-            "dashLength":10,
-            "dashes":false,
-            "datasource":"zabbix",
-            "editable":true,
-            "error":false,
-            "fieldConfig":{
-               "defaults":{
-                  "custom":{
-
-                  }
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "zabbix",
+            "editable": true,
+            "error": false,
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {}
                },
-               "overrides":[
-
-               ]
+               "overrides": []
             },
-            "fill":3,
-            "fillGradient":0,
-            "grid":{
-
+            "fill": 3,
+            "fillGradient": 0,
+            "grid": {},
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 32
             },
-            "gridPos":{
-               "h":6,
-               "w":24,
-               "x":0,
-               "y":32
+            "hiddenSeries": false,
+            "id": 3,
+            "legend": {
+               "alignAsTable": true,
+               "avg": true,
+               "current": true,
+               "max": true,
+               "min": true,
+               "rightSide": false,
+               "show": true,
+               "sort": "current",
+               "sortDesc": true,
+               "total": false,
+               "values": true
             },
-            "hiddenSeries":false,
-            "id":3,
-            "legend":{
-               "alignAsTable":true,
-               "avg":true,
-               "current":true,
-               "max":true,
-               "min":true,
-               "rightSide":false,
-               "show":true,
-               "total":false,
-               "values":true
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "maxPerRow": 3,
+            "nullPointMode": "connected",
+            "options": {
+               "alertThreshold": true
             },
-            "lines":true,
-            "linewidth":2,
-            "links":[
-
-            ],
-            "maxPerRow":3,
-            "nullPointMode":"connected",
-            "options":{
-               "alertThreshold":true
-            },
-            "percentage":false,
-            "pluginVersion":"7.2.1",
-            "pointradius":5,
-            "points":false,
-            "renderer":"flot",
-            "repeat":"netif",
-            "seriesOverrides":[
+            "percentage": false,
+            "pluginVersion": "7.2.1",
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "repeat": "netif",
+            "seriesOverrides": [
                {
-                  "alias":"/Incoming/",
-                  "transform":"negative-Y"
+                  "alias": "/Incoming/",
+                  "transform": "negative-Y"
                }
             ],
-            "spaceLength":10,
-            "stack":false,
-            "steppedLine":false,
-            "targets":[
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
                {
-                  "application":{
-                     "filter":""
+                  "application": {
+                     "filter": ""
                   },
-                  "countTriggers":true,
-                  "functions":[
-
-                  ],
-                  "group":{
-                     "filter":"$group"
+                  "countTriggers": true,
+                  "functions": [],
+                  "group": {
+                     "filter": "$group"
                   },
-                  "host":{
-                     "filter":"$host"
+                  "host": {
+                     "filter": "$host"
                   },
-                  "item":{
-                     "filter":"/.* (Bits received|Bits sent)/"
+                  "item": {
+                     "filter": "/.* (Bits received|Bits sent)/"
                   },
-                  "minSeverity":3,
-                  "options":{
-                     "showDisabledItems":false,
-                     "skipEmptyValues":false
+                  "minSeverity": 3,
+                  "options": {
+                     "showDisabledItems": false,
+                     "skipEmptyValues": false
                   },
-                  "proxy":{
-                     "filter":""
+                  "proxy": {
+                     "filter": ""
                   },
-                  "queryType":0,
-                  "refId":"A",
-                  "resultFormat":"time_series",
-                  "table":{
-                     "skipEmptyValues":false
+                  "queryType": 0,
+                  "refId": "A",
+                  "resultFormat": "time_series",
+                  "table": {
+                     "skipEmptyValues": false
                   },
-                  "tags":{
-                     "filter":""
+                  "tags": {
+                     "filter": ""
                   },
-                  "trigger":{
-                     "filter":""
+                  "trigger": {
+                     "filter": ""
                   },
-                  "triggers":{
-                     "acknowledged":2,
-                     "count":true,
-                     "minSeverity":3
+                  "triggers": {
+                     "acknowledged": 2,
+                     "count": true,
+                     "minSeverity": 3
                   }
                }
             ],
-            "thresholds":[
-
-            ],
-            "timeFrom":null,
-            "timeRegions":[
-
-            ],
-            "timeShift":null,
-            "title":"Network traffic",
-            "tooltip":{
-               "msResolution":false,
-               "shared":true,
-               "sort":0,
-               "value_type":"cumulative"
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Network traffic",
+            "tooltip": {
+               "msResolution": false,
+               "shared": true,
+               "sort": 0,
+               "value_type": "cumulative"
             },
-            "type":"graph",
-            "xaxis":{
-               "buckets":null,
-               "mode":"time",
-               "name":null,
-               "show":true,
-               "values":[
-
-               ]
+            "type": "graph",
+            "xaxis": {
+               "buckets": null,
+               "mode": "time",
+               "name": null,
+               "show": true,
+               "values": []
             },
-            "yaxes":[
+            "yaxes": [
                {
-                  "format":"bps",
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "bps",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                },
                {
-                  "format":"short",
-                  "logBase":1,
-                  "max":null,
-                  "min":null,
-                  "show":true
+                  "format": "short",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
                }
             ],
-            "yaxis":{
-               "align":false,
-               "alignLevel":null
+            "yaxis": {
+               "align": false,
+               "alignLevel": null
             }
          }
       ],
-      "refresh":"1m",
-      "revision":1,
-      "schemaVersion":26,
-      "style":"dark",
-      "tags":[
+      "refresh": "1m",
+      "revision": 1,
+      "schemaVersion": 26,
+      "style": "dark",
+      "tags": [
          "zabbix"
       ],
-      "templating":{
-         "list":[
+      "templating": {
+         "list": [
             {
-               "allFormat":"regex values",
-               "allValue":null,
-               "current":{
-                  "selected":false,
-                  "text":"Windows servers",
-                  "value":"Windows servers"
+               "allFormat": "regex values",
+               "allValue": null,
+               "current": {
+                  "selected": false,
+                  "text": "Windows servers",
+                  "value": "Windows servers"
                },
-               "datasource":"zabbix",
-               "definition":"",
-               "hide":0,
-               "includeAll":false,
-               "label":"Group",
-               "multi":false,
-               "multiFormat":"glob",
-               "name":"group",
-               "options":[
-
-               ],
-               "query":"*",
-               "refresh":1,
-               "refresh_on_load":false,
-               "regex":"",
-               "skipUrlSync":false,
-               "sort":0,
-               "tagValuesQuery":"",
-               "tags":[
-
-               ],
-               "tagsQuery":"",
-               "type":"query",
-               "useTags":false
+               "datasource": "zabbix",
+               "definition": "",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Group",
+               "multi": false,
+               "multiFormat": "glob",
+               "name": "group",
+               "options": [],
+               "query": "*",
+               "refresh": 1,
+               "refresh_on_load": false,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
             },
             {
-               "allFormat":"glob",
-               "allValue":null,
-               "current":{
-                  "selected":false,
-                  "text":"WindowsServer2019",
-                  "value":"WindowsServer2019"
+               "allFormat": "glob",
+               "allValue": null,
+               "current": {
+                  "selected": false,
+                  "text": "WindowsServer2019",
+                  "value": "WindowsServer2019"
                },
-               "datasource":"zabbix",
-               "definition":"",
-               "hide":0,
-               "includeAll":false,
-               "label":"Host",
-               "multi":false,
-               "multiFormat":"glob",
-               "name":"host",
-               "options":[
-
-               ],
-               "query":"$group.*",
-               "refresh":1,
-               "refresh_on_load":false,
-               "regex":"",
-               "skipUrlSync":false,
-               "sort":0,
-               "tagValuesQuery":"",
-               "tags":[
-
-               ],
-               "tagsQuery":"",
-               "type":"query",
-               "useTags":false
+               "datasource": "zabbix",
+               "definition": "",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Host",
+               "multi": false,
+               "multiFormat": "glob",
+               "name": "host",
+               "options": [],
+               "query": "$group.*",
+               "refresh": 1,
+               "refresh_on_load": false,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
             },
             {
-               "allFormat":"regex values",
-               "allValue":null,
-               "current":{
-                  "selected":false,
-                  "text":"All",
-                  "value":"$__all"
+               "allFormat": "regex values",
+               "allValue": null,
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
                },
-               "datasource":"zabbix",
-               "definition":"",
-               "hide":0,
-               "hideLabel":false,
-               "includeAll":true,
-               "label":"Network interface",
-               "multi":true,
-               "multiFormat":"regex values",
-               "name":"netif",
-               "options":[
-
-               ],
-               "query":"*.$host.Network interfaces.*",
-               "refresh":1,
-               "refresh_on_load":false,
-               "regex":"/(?:Incoming|Outgoing) network traffic on (.*)/",
-               "skipUrlSync":false,
-               "sort":0,
-               "tagValuesQuery":"",
-               "tags":[
-
-               ],
-               "tagsQuery":"",
-               "type":"query",
-               "useTags":false
+               "datasource": "zabbix",
+               "definition": "",
+               "hide": 0,
+               "hideLabel": false,
+               "includeAll": true,
+               "label": "Network interface",
+               "multi": true,
+               "multiFormat": "regex values",
+               "name": "netif",
+               "options": [],
+               "query": "*.$host.Network interfaces.*",
+               "refresh": 1,
+               "refresh_on_load": false,
+               "regex": "/(?:Incoming|Outgoing) network traffic on (.*)/",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tags": [],
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
             }
          ]
       },
-      "time":{
-         "from":"now-6h",
-         "to":"now"
+      "time": {
+         "from": "now-6h",
+         "to": "now"
       },
-      "timepicker":{
-         "now":true,
-         "refresh_intervals":[
+      "timepicker": {
+         "now": true,
+         "refresh_intervals": [
             "30s",
             "1m",
             "5m",
@@ -2238,7 +2056,7 @@
             "2h",
             "1d"
          ],
-         "time_options":[
+         "time_options": [
             "5m",
             "15m",
             "1h",
@@ -2250,10 +2068,10 @@
             "30d"
          ]
       },
-      "timezone":"browser",
-      "title":"Windows Servers",
-      "id":null,
-      "uid":null,
-      "version":null
+      "timezone": "browser",
+      "title": "Windows Servers",
+      "id": null,
+      "uid": null,
+      "version": null
    }
 }
