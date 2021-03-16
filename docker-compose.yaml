@@ -1,7 +1,7 @@
 version: '3.5'
 services:
  zabbix-server:
-  image: zabbix/zabbix-server-mysql:alpine-5.0-latest
+  image: zabbix/zabbix-server-mysql:alpine-5.2-latest
   ports:
    - "10051:10051"
   volumes:
@@ -67,7 +67,7 @@ services:
    com.zabbix.os: "alpine"
 
  zabbix-web-nginx-mysql:
-  image: zabbix/zabbix-web-nginx-mysql:alpine-5.0-latest
+  image: zabbix/zabbix-web-nginx-mysql:alpine-5.2-latest
   ports:
    - "8081:8080"
    - "8443:8443"
@@ -122,7 +122,7 @@ services:
    com.zabbix.os: "alpine"
 
  zabbix-agent:
-  image: zabbix/zabbix-agent:alpine-5.0-latest
+  image: zabbix/zabbix-agent2:alpine-5.2-latest
   ports:
    - "10050:10050"
   volumes:
@@ -132,6 +132,7 @@ services:
    - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
    - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
    - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+   - /var/run:/var/run
   restart: always
   links:
    - zabbix-server:zabbix-server
@@ -159,7 +160,7 @@ services:
    com.zabbix.os: "alpine"
 
  zabbix-java-gateway:
-  image: zabbix/zabbix-java-gateway:alpine-5.0-latest
+  image: zabbix/zabbix-java-gateway:alpine-5.2-latest
   ports:
    - "10052:10052"
   restart: always
@@ -183,7 +184,7 @@ services:
    com.zabbix.os: "alpine"
 
  zabbix-snmptraps:
-  image: zabbix/zabbix-snmptraps:alpine-5.0-latest
+  image: zabbix/zabbix-snmptraps:alpine-5.2-latest
   ports:
    - "162:1162/udp"
   volumes:
@@ -238,7 +239,7 @@ services:
      - mysql-database
 
  grafana-server:
-   image: grafana/grafana:7.2.1
+   image: grafana/grafana:latest
    ports:
      - "3000:3000"
    volumes:
@@ -255,7 +256,7 @@ services:
      nofile:
        soft: 20000
        hard: 40000
-   mem_limit: 512m
+       #   mem_limit: 512m
    user: root
    networks:
     zbx_net_backend:
@@ -271,7 +272,7 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 172.16.238.0/24
+      - subnet: 172.32.238.0/24
   zbx_net_backend:
     driver: bridge
     driver_opts:
@@ -280,7 +281,7 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 172.16.239.0/24
+      - subnet: 172.32.239.0/24
 
 volumes:
   mysql-data:

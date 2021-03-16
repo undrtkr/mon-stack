@@ -1159,6 +1159,7 @@ cat <<EOF
     "params": {
         "alias": "apiuser",
         "passwd": "zabbix",
+        "roleid": "1",
         "usrgrps": [
             {
                 "usrgrpid": "$API_USERS_GROUP_ID"
