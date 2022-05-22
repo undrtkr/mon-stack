@@ -1,5 +1,8 @@
 # Dockerized Zabbix Server 5.0 Installation Script
-
+Edlib
+&middot;
+[![Latest Github release](https://img.shields.io/github/release/undrtkr/mon-stack.svg)](https://github.com//undrtkr/mon-stack/releases/latest)
+=====
 
 This script, installs and configures a dockerized zabbix 5.0 server in a fully automated way on CentOS 7 platforms.
 
